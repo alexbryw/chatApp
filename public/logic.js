@@ -1,9 +1,13 @@
 const socket = io()
 
-let name = ""
+window.addEventListener('load', () =>{
+    init()
+})
 
-window.onload = () => {
-    name = prompt("Vad heter du?")
+function init(){
+    const userForm = document.querySelector('.join.ui')
+    userForm.addEventListener('submit', onJoinRoom)
+
 }
 
 socket.on('message', (incoming) => {
@@ -14,6 +18,12 @@ socket.on('message', (incoming) => {
 
     list.appendChild(listItem)
 } )
+
+function onJoinRoom(event){
+    event.preventDefault()
+    const joinModal = document.querySelector('.joinChatModal')
+    joinModal.classList.add('hidden')
+}
 
 //Det här är allt som behövs för att skicka ett meddelande (client-side)
 function sendMessage(){
