@@ -51,8 +51,9 @@ function onSendMessage(event) {
 function sendMessage(){
     let input = document.getElementById("messageInput")
     let message = input.value
-    input.value = ""
 
     //skickar meddelande
-    socket.emit('message', {name, message})
+    socket.emit('message', message)
+
+    input.value = ""
 }
