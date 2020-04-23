@@ -5,14 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>chatApp!</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.9.3/qs.min.js" integrity="sha256-lSPkSu/D04IeqWOhTgTf5tLzNFEc37oNE9ysGS9PdK4=" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&family=VT323&display=swap" rel="stylesheet">
+
     <script src="/socket.io/socket.io.js"></script>
     <script defer src="./logic.js"></script>
 </head>
 <body>
   <div class = "joinChatModal">
     <form class="join ui">
-      <input type="text" placeholder="Enter your nic" id= "username" name = "username">
+      <h2>Welcome to ChatApp</h2>
+      <input type="text" placeholder="Enter your nic" id= "username" required>
       <button>Join Main Chat</button>
     </form>
   </div>
@@ -26,20 +28,24 @@
     </form>
   </div>
   <div class = "roomList">
-    <h2>Public Rooms</h2>
-    <ul class = "publicRoomList">
-      <!-- PUBLIC ROOMS GOES HERE -->
-      <li>Hårdkodad</li>
-      <li>För</li>
-      <li>Design</li>
-    </ul>
-    <h2>Private Rooms</h2> 
-    <ul class = "privateRoomList">
-      <!-- PRIVATE ROOMS GOES HERE -->
-      <li>HEMLIG</li>
-      <li>INFO</li>
-      <li>PASSWORD</li>
-    </ul>
+    <div class = "publicRoomList">
+      <h2>Public Rooms</h2>
+      <ul>
+        <!-- PUBLIC ROOMS GOES HERE -->
+        <li>Hårdkodad</li>
+        <li>För</li>
+        <li>Design</li>
+      </ul>
+    </div>
+    <div class = "privateRoomList">
+      <h2>Private Rooms</h2> 
+      <ul>
+        <!-- PRIVATE ROOMS GOES HERE -->
+        <li>HEMLIG</li>
+        <li>INFO</li>
+        <li>PASSWORD</li>
+      </ul>
+    </div>
     <form class = "newRoomForm">
       <input type="text" placeholder ="New Room">
       <input type="text" placeholder ="Password?">

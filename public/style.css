@@ -9,6 +9,25 @@
 body{
     position:relative;
     display: flex;
+    font-family: 'VT323', monospace;
+    letter-spacing: 0.1rem;
+    color:white
+}
+
+button{
+    font-family: 'Open Sans', sans-serif;
+}
+
+input{
+    color:black;
+    font-family: 'VT323', monospace;
+    font-size: 1.2rem;
+    letter-spacing: 0.1rem;
+    padding: 0.5rem 1.5rem;
+}
+
+li{
+    color: greenyellow
 }
 
 .joinChatModal{
@@ -22,12 +41,52 @@ body{
     z-index:3;
 }
 
+.join.ui{
+    display:flex;
+    flex-direction:column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 4rem;
+    border: 2px solid greenyellow;
+    border-radius: 2rem; 
+}
+
+.joinChatModal h2{
+    font-size: 3rem;
+    letter-spacing: 0.2rem;
+    margin: 0 0 1rem 0;
+}
+.joinChatModal input{
+    font-size: 2rem;
+    text-align: center;
+    border:none;
+    border-radius: 0.2rem;
+    padding: 1rem 2rem;
+    margin: 1.5rem 0;
+}
+
+.joinChatModal button{
+    font-size: 1.1rem;
+    background-color: greenyellow;
+    color:black;
+    /* border: 2px solid green; */
+    border: none;
+    border-radius: 0.2rem;
+    padding: 0.8rem 1.8rem;
+    margin: 1rem 0;
+    cursor: pointer;
+}
+
+.joinChatModal button:hover{
+    background-color: yellow;
+}
+
 .hidden{
     display:none;
 }
 
 .chatUI{
-    background-color: blue;
+    background-color: black;
     display: flex;
     height: 100vh;
     width: 100%;
@@ -35,11 +94,74 @@ body{
 }
 
 .chatUI ul {
-    background-color: blueviolet;
-    flex: 1
+    background-color: black;
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem 3rem;
+}
+
+.chatUI li{
+    margin: 1rem 0;
+    font-size: 1.5rem;
+}
+
+.messageInput {
+    display:flex;
+    border: 1px solid yellowgreen
+}
+
+.messageInput input{
+    font-size: 1.5rem;
+    flex-grow: 1;
+    background-color: black;
+    color: greenyellow;
+    border:none;
+}
+
+.messageInput button{
+    padding: 0 2rem;
+    background-color: greenyellow;
+    color:black;
+    font-size: 1rem;
+    border: none;
+}
+
+.messageInput button:hover{
+    background-color: yellow;
+    cursor: pointer;
+}
+
+.roomList{
+    background: rgb(51, 51, 51);
+    padding: 2rem;
+    width: 20%;
+    display:flex;
+    flex-direction: column;
+}
+
+.roomList h2{
+    font-size: 2rem;
+    letter-spacing: 0.2rem;
+}
+
+.publicRoomList, .privateRoomList{
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.roomList li{
+    font-size: 1.5rem;
+    letter-spacing: 0.1rem;
+    margin: 1rem 0;
+    cursor: pointer;
+}
+.roomList li:hover{
+    color:yellow;
 }
 
 .newRoomForm{
     display:flex;
     flex-direction: column;
+    border: 2px solid yellowgreen;
+    border-radius: 0.2rem;
 }
