@@ -55,12 +55,16 @@ function listAllRooms(){
 
 
 
-function selectPublicRoom(korv){
-    console.log(korv)
+function selectPublicRoom(room){
+    console.log(room)
 }
 
-function selectPrivateRoom(korv){
-    //titta på lösenord-kod här
-    console.log(korv)
-}
+function selectPrivateRoom(room){
+    var passwordInput = prompt("Please enter your name", "");
 
+    if (passwordInput === room.password) {
+        console.log(room)
+    } else {
+        alert("Wrong password")
+    }
+}
