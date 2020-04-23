@@ -1,0 +1,45 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    outline:none;
+    list-style-type: none;
+}
+
+body{
+    position:relative;
+    display: flex;
+}
+
+.joinChatModal{
+    height:100vh;
+    width:100%;
+    background-color:black;
+    position:absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index:3;
+}
+
+.hidden{
+    display:none;
+}
+
+.chatUI{
+    background-color: blue;
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    flex-direction: column;
+}
+
+.chatUI ul {
+    background-color: blueviolet;
+    flex: 1
+}
+
+.newRoomForm{
+    display:flex;
+    flex-direction: column;
+}
