@@ -14,10 +14,10 @@ window.addEventListener('load', () =>{
 function init(){
     const userForm = document.querySelector('.join.ui')
     userForm.addEventListener('submit', onJoinRoom)
-    const messageForm = document.querySelector('.messageInput button')
-    messageForm.addEventListener('click', onSendMessage)
-    const changeRoomForm = document.querySelector('.changeRoomForm button')
-    changeRoomForm.addEventListener('click', changeRoom)
+    const messageForm = document.querySelector('.messageInput')
+    messageForm.addEventListener('submit', onSendMessage)
+/*     const changeRoomForm = document.querySelector('.changeRoomForm button')
+    changeRoomForm.addEventListener('click', changeRoom) */
 
     listAllRooms()
 }
@@ -62,8 +62,9 @@ function onJoinRoom(event){
 }
 
 function onSendMessage(event) {
-    console.log('I am clicked!')
     event.preventDefault()
+    console.log('I am clicked!')
+    
     const input = document.querySelector('.messageInput input')
     socket.emit('message', input.value)
     input.value = ""
