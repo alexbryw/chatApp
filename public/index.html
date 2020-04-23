@@ -9,6 +9,7 @@
 
     <script src="/socket.io/socket.io.js"></script>
     <script defer src="./logic.js"></script>
+    <script defer src="./roomList.js"></script>
 </head>
 <body>
   <div class = "joinChatModal">
@@ -28,15 +29,15 @@
     </form>
   </div>
   <div class = "roomList">
-    <div class = "publicRoomList">
+    <div class = "publicRoomListContainer">
       <h2>Public Rooms</h2>
-      <ul>
+      <ul class = "publicRoomList">
         <!-- PUBLIC ROOMS GOES HERE -->
       </ul>
     </div>
-    <div class = "privateRoomList">
+    <div class = "privateRoomListContainer">
       <h2>Private Rooms</h2> 
-      <ul>
+      <ul class = "privateRoomList">
         <!-- PRIVATE ROOMS GOES HERE -->
       </ul>
     </div>
@@ -45,6 +46,10 @@
       <input type="text" placeholder ="Password?">
       <button type ="submit">Add new room</button>
     </form>
+<!--     <form class = "changeRoomForm">
+      <input type="text" placeholder ="Room">
+      <button type ="submit">join room</button>
+    </form> -->
   </div>
 </body>
 </html>

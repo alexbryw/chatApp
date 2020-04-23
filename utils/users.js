@@ -27,6 +27,10 @@ function removeUserOnLeave(id){
     } 
 }
 
+function getUsers(){
+    return users
+}
+
 //Get room users
 /* function getUsersRoom(room){
     return users.filter(user => user.room === room)
@@ -36,5 +40,6 @@ module.exports = {
     userJoin,
     getCurrentUser,
     removeUserOnLeave,
+    getUsers,
    // getRoomUsers
 }

@@ -152,19 +152,19 @@ li{
     
 }
 
-.publicRoomList, .privateRoomList{
+.publicRoomListContainer, .privateRoomListContainer{
     flex-grow: 1;
     height: 50%;
 }
 
-.publicRoomList ul{
+.publicRoomListContainer ul{
     height:80%;
     overflow-y: auto;
     width: 100%;
     padding: 0 10%;
 } 
 
-.privateRoomList ul{
+.privateRoomListContainer ul{
     height:80%;
     overflow-y: auto;
 
