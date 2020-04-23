@@ -16,8 +16,8 @@ function init(){
     userForm.addEventListener('submit', onJoinRoom)
     const messageForm = document.querySelector('.messageInput')
     messageForm.addEventListener('submit', onSendMessage)
-/*     const changeRoomForm = document.querySelector('.changeRoomForm button')
-    changeRoomForm.addEventListener('click', changeRoom) */
+    const newRoomForm = document.querySelector('.newRoomForm button')
+    newRoomForm.addEventListener('click', newRoom)
 
     listAllRooms()
 }
@@ -89,4 +89,16 @@ function changeRoom(newRoomInfo){
     //change room. enter username and new room name.
     //(username is maybe not be needed, server is using socket.id).
     socket.emit("change room", { username: nameOfUser , room: newRoomInfo.roomName})
+}
+
+function newRoom(event){
+    event.preventDefault()
+    const inputNewRoomEl = document.getElementById('newRoomNameIn')
+    console.log(inputNewRoomEl.value)
+    if(inputNewRoomEl.value){
+        const newRoomInfo = {roomName: inputNewRoomEl.value, password: ""}
+        changeRoom(newRoomInfo)
+    } else{
+        console.log("Enter new room name")
+    }
 }
