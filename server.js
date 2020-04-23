@@ -15,29 +15,34 @@ io.on('connection', (socket) => {
     socket.on('join room', ({username, room}) => {
         console.log("from join room")
         const user = userJoin(socket.id, username, room)
+        
+        //Send userList to all users when new user joins.
+        io.emit('roomList',{userList: getUsers()}) 
         console.log(getUsers())
         socket.join(user.room)
-        console.log(socket.rooms)
-        console.log(username)
+        console.log("userName: " + username)
 
         socket.emit('message', `Welcome ${username}`)
 
         socket.broadcast.to(user.room).emit('message', `${username} has joined the chat`)
     })
 
-    socket.on('leave room', ({username, room}) => {
-        console.log("from leave room")
-        console.log(socket.rooms)
-        console.log(getUsers())
-        const user = removeUserOnLeave(socket.id)
+    //Leave old room and join the new room and update room in users.
+    socket.on('change room', ({username, room}) => {
+        console.log(username, room)
+        const user = getCurrentUser(socket.id)
 
         if(user){
             io.to(user.room).emit('message', `${user.username} has left the chat`)
+            socket.leaveAll()// User leaves all rooms.
+            user.room = room
+            socket.join(user.room) //User joins new room.
+            socket.broadcast.to(user.room).emit('message', `${username} has joined the chat`)
+            
+            //Send updated room/user list to all clients on roomList.
+            io.emit('roomList',{userList: getUsers()})
         }
-        socket.leaveAll()
 
-        console.log("leave room " + room)
-        console.log(getUsers())
     })
 /* 
     socket.on('message', (message) => {
@@ -58,10 +63,15 @@ io.on('connection', (socket) => {
 
         if(user){
             io.to(user.room).emit('message', `${user.username} has left the chat`)
-            console.log("User disconnected.")
+            //Update all connected clients of the new user/room list.
+            io.emit('roomList',{userList: getUsers()})
         }
-
+        
+        console.log("someone disconnected.")
     })
+
+    //Send userList to all on connect.
+    io.emit('roomList',{userList: getUsers()})
 })
 
 http.listen(port, () => {
