@@ -1,5 +1,7 @@
 const socket = io()
 
+
+
 /* const {username, room} = Qs.parse(location.search, {
     ignoreQueryPrefix: true
 }) */
@@ -13,7 +15,7 @@ function init(){
     userForm.addEventListener('submit', onJoinRoom)
     const messageForm = document.querySelector('.messageInput button')
     messageForm.addEventListener('click', onSendMessage)
-
+    listAllRooms()
 }
 
 //socket.emit('joinRoom', {username, room})
