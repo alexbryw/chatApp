@@ -1,6 +1,8 @@
 const socket = io()
 let nameOfUser = ""
 
+
+
 /* const {username, room} = Qs.parse(location.search, {
     ignoreQueryPrefix: true
 }) */
@@ -17,6 +19,7 @@ function init(){
     const changeRoomForm = document.querySelector('.changeRoomForm button')
     changeRoomForm.addEventListener('click', changeRoom)
 
+    listAllRooms()
 }
 
 //socket.emit('joinRoom', {username, room})

@@ -8,6 +8,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.9.3/qs.min.js" integrity="sha256-lSPkSu/D04IeqWOhTgTf5tLzNFEc37oNE9ysGS9PdK4=" crossorigin="anonymous"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script defer src="./logic.js"></script>
+    <script defer src="./roomList.js"></script>
 </head>
 <body>
   <div class = "joinChatModal">
@@ -29,16 +30,10 @@
     <h2>Public Rooms</h2>
     <ul class = "publicRoomList">
       <!-- PUBLIC ROOMS GOES HERE -->
-      <li>Hårdkodad</li>
-      <li>För</li>
-      <li>Design</li>
     </ul>
     <h2>Private Rooms</h2> 
     <ul class = "privateRoomList">
       <!-- PRIVATE ROOMS GOES HERE -->
-      <li>HEMLIG</li>
-      <li>INFO</li>
-      <li>PASSWORD</li>
     </ul>
     <form class = "newRoomForm">
       <input type="text" placeholder ="New Room">
