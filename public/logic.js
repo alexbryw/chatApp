@@ -24,15 +24,24 @@ function init(){
 
 //New user/room list sent here on every change in list.
 socket.on('roomList', (data) => {
+    rooms = [] //Empty rooms array and fill with roomList from server.
     if(data.userList === false){
         console.log("Empty userList")
+        const newRoom = {roomName: "main", password: ""}
+        rooms.push(newRoom)
     } else {
         console.log("from userList")
         console.log(data)
         for (const user of data.userList) {
             console.log("User: "+ user.username + "  Room: " + user.room)
+            const newRoom = {roomName: user.room, password: ""}
+            rooms.push(newRoom)
+
         }
+        listAllRooms() //Update ul list when rooms has been updated.
     }
+
+    //TODO sort list to remove duplicate room names.
 
 })
 
