@@ -1,4 +1,5 @@
 const socket = io()
+let nameOfUser = ""
 
 /* const {username, room} = Qs.parse(location.search, {
     ignoreQueryPrefix: true
@@ -13,6 +14,8 @@ function init(){
     userForm.addEventListener('submit', onJoinRoom)
     const messageForm = document.querySelector('.messageInput button')
     messageForm.addEventListener('click', onSendMessage)
+    const changeRoomForm = document.querySelector('.changeRoomForm button')
+    changeRoomForm.addEventListener('click', changeRoom)
 
 }
 
@@ -33,6 +36,8 @@ function onJoinRoom(event){
     joinModal.classList.add('hidden')
     const usernameInput = document.querySelector('#username')
     const username = usernameInput.value
+    nameOfUser = usernameInput.value
+
     const room = 'main'
 
     socket.emit('join room', { username, room })
@@ -56,4 +61,15 @@ function sendMessage(){
     socket.emit('message', message)
 
     input.value = ""
+}
+
+function changeRoom(event){
+    event.preventDefault()
+    const roomInputEl = document.querySelector('.changeRoomForm input')
+    const roomName = roomInputEl.value
+    //leave old room.
+    socket.emit("leave room", { username: nameOfUser , room: roomName})
+
+    //join new room.
+    socket.emit("join room", { username: nameOfUser , room: roomName})
 }
