@@ -16,8 +16,8 @@ function init(){
     userForm.addEventListener('submit', onJoinRoom)
     const messageForm = document.querySelector('.messageInput button')
     messageForm.addEventListener('click', onSendMessage)
-    const changeRoomForm = document.querySelector('.changeRoomForm button')
-    changeRoomForm.addEventListener('click', changeRoom)
+/*     const changeRoomForm = document.querySelector('.changeRoomForm button')
+    changeRoomForm.addEventListener('click', changeRoom) */
 
     listAllRooms()
 }
