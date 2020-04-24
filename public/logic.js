@@ -1,5 +1,7 @@
 const socket = io()
 let nameOfUser = ""
+let listOfSortedRooms = [] //backup save list if needed later
+let currentRoom = "" //TODO Set later from sortUserList, compare to nameOfUser
 
 
 
@@ -29,17 +31,18 @@ socket.on('roomList', (data) => {
     rooms = [] //Empty rooms array and fill with roomList from server.
     if(data.userList === false){
         console.log("Empty userList")
-        const newRoom = {roomName: "main", password: ""}
-        rooms.push(newRoom)
+        // const newRoom = {roomName: "main", password: ""}
+        // rooms.push(newRoom)
     } else {
-        console.log("from userList")
-        console.log(data)
-        for (const user of data.userList) {
-            console.log("User: "+ user.username + "  Room: " + user.room)
-            const newRoom = {roomName: user.room, password: ""}
-            rooms.push(newRoom)
+        rooms = sortUserList(data)
+        // console.log("from userList")
+        // console.log(data)
+        // for (const user of data.userList) {
+        //     console.log("User: "+ user.username + "  Room: " + user.room)
+        //     const newRoom = {roomName: user.room, password: ""}
+        //     rooms.push(newRoom)
 
-        }
+        // }
         listAllRooms() //Update ul list when rooms has been updated.
     }
 
@@ -47,7 +50,45 @@ socket.on('roomList', (data) => {
 
 })
 
-//socket.emit('joinRoom', {username, room})
+function sortUserList(data){
+    const sortedRoomList = []
+    for (const user of data.userList) {
+        setCurrentRoom(user) //see if user has changed room and update currentRoom.
+        const room = sortedRoomList.find(room => room.roomName === user.room)
+        console.log(room)
+        if(room){
+            console.log("room found, will add user to room")
+            const newUsersInRoom = room.usersInRoom
+            newUsersInRoom.push(user.username)
+            room.usersInRoom = newUsersInRoom
+        } else {
+            console.log("room not found will add new room and user")
+            const usersInRoom = [user.username]
+            const room = user.room
+            const newRoom = {roomName: room, usersInRoom: usersInRoom, password: ""}
+            sortedRoomList.push(newRoom)
+        }
+        console.log("from Sorted room list")
+        console.log(sortedRoomList)
+    }
+    listOfSortedRooms = [...sortedRoomList] //backup, save sorted list.
+    return sortedRoomList
+
+}
+
+//could use socket.id if multiple users have the same name.
+function setCurrentRoom(user){
+    if(user.username === nameOfUser){
+        if(currentRoom !== user.room){
+            currentRoom = user.room
+            console.log("Updated current room: " + currentRoom)
+            const chatListEl = document.querySelector(".chatMessages")
+            const li = document.createElement('li')
+            li.innerText = "Current Room: " + currentRoom
+            chatListEl.append(li)
+        }
+    }
+}
 
 socket.on('message', (message) => {
     const list = document.querySelector('.chatMessages')
