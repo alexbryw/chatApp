@@ -51,7 +51,8 @@ socket.on('message', (message) => {
     const list = document.querySelector('.chatMessages')
 
     const listItem = document.createElement('li')
-    listItem.innerText = message
+    listItem.setAttribute('class', `${message.color}Text`)
+    listItem.innerText = message.message
 
     list.appendChild(listItem)
 } )
@@ -63,10 +64,12 @@ function onJoinRoom(event){
     const usernameInput = document.querySelector('#username')
     const username = usernameInput.value
     nameOfUser = usernameInput.value
+    const selectedColor = document.querySelector('#selectedColor')
+    color = selectedColor.value
 
     const room = 'main'
 
-    socket.emit('join room', { username, room })
+    socket.emit('join room', { username, color, room })
     console.log(room)
 }
 
@@ -80,7 +83,7 @@ function onSendMessage(event) {
 }
 
 //Det här är allt som behövs för att skicka ett meddelande (client-side)
-function sendMessage(){
+/* function sendMessage(){
     let input = document.getElementById("messageInput")
     let message = input.value
 
@@ -88,7 +91,7 @@ function sendMessage(){
     socket.emit('message', message)
 
     input.value = ""
-}
+} */
 
 function changeRoom(newRoomInfo){
     // event.preventDefault()
@@ -103,6 +106,7 @@ function changeRoom(newRoomInfo){
 function newRoom(event){
     event.preventDefault()
     const inputNewRoomEl = document.getElementById('newRoomNameIn')
+    const inputNewRoomPassword = document.getElementById('newRoomPasswordIn')
     console.log(inputNewRoomEl.value)
     if(inputNewRoomEl.value){
         const newRoomInfo = {roomName: inputNewRoomEl.value, password: ""}
@@ -110,4 +114,6 @@ function newRoom(event){
     } else{
         console.log("Enter new room name")
     }
+    inputNewRoomEl.value = ""
+    inputNewRoomPassword.value = ""
 }
