@@ -55,8 +55,9 @@ function listAllRooms(){
 
 
 
-function selectPublicRoom(korv){
-    console.log(korv)
+function selectPublicRoom(newRoomInfo){
+    console.log(newRoomInfo)
+    changeRoom(newRoomInfo)
 }
 
 function selectPrivateRoom(korv){

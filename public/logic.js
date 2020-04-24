@@ -81,11 +81,12 @@ function sendMessage(){
     input.value = ""
 }
 
-function changeRoom(event){
-    event.preventDefault()
-    const roomInputEl = document.querySelector('.changeRoomForm input')
-    const roomName = roomInputEl.value
+function changeRoom(newRoomInfo){
+    // event.preventDefault()
+    // const roomInputEl = document.querySelector('.changeRoomForm input')
+    // const roomName = roomInputEl.value
     
     //change room. enter username and new room name.
-    socket.emit("change room", { username: nameOfUser , room: roomName})
+    //(username is maybe not be needed, server is using socket.id).
+    socket.emit("change room", { username: nameOfUser , room: newRoomInfo.roomName})
 }
