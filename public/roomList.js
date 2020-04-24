@@ -59,6 +59,7 @@ function listAllRooms(){
 
 function selectPublicRoom(room){
     console.log(room)
+    changeRoom(room)
 }
 
 function selectPrivateRoom(room){
