@@ -34,6 +34,8 @@ function listAllRooms(){
     }
     const publicRoomList = document.querySelector('.publicRoomList')
     const privateRoomList = document.querySelector('.privateRoomList')
+    publicRoomList.innerHTML = ""
+    privateRoomList.innerHTML = ""
 
     for(let i = 0; i < publicRoomArray.length; i++){
         data = JSON.stringify(publicRoomArray[i])
@@ -55,8 +57,9 @@ function listAllRooms(){
 
 
 
-function selectPublicRoom(korv){
-    console.log(korv)
+function selectPublicRoom(newRoomInfo){
+    console.log(newRoomInfo)
+    changeRoom(newRoomInfo)
 }
 
 function selectPrivateRoom(korv){

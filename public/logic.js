@@ -16,11 +16,34 @@ function init(){
     userForm.addEventListener('submit', onJoinRoom)
     const messageForm = document.querySelector('.messageInput')
     messageForm.addEventListener('submit', onSendMessage)
-/*     const changeRoomForm = document.querySelector('.changeRoomForm button')
-    changeRoomForm.addEventListener('click', changeRoom) */
+    const newRoomForm = document.querySelector('.newRoomForm button')
+    newRoomForm.addEventListener('click', newRoom)
 
     listAllRooms()
 }
+
+//New user/room list sent here on every change in list.
+socket.on('roomList', (data) => {
+    rooms = [] //Empty rooms array and fill with roomList from server.
+    if(data.userList === false){
+        console.log("Empty userList")
+        const newRoom = {roomName: "main", password: ""}
+        rooms.push(newRoom)
+    } else {
+        console.log("from userList")
+        console.log(data)
+        for (const user of data.userList) {
+            console.log("User: "+ user.username + "  Room: " + user.room)
+            const newRoom = {roomName: user.room, password: ""}
+            rooms.push(newRoom)
+
+        }
+        listAllRooms() //Update ul list when rooms has been updated.
+    }
+
+    //TODO sort list to remove duplicate room names.
+
+})
 
 //socket.emit('joinRoom', {username, room})
 
@@ -67,13 +90,24 @@ function sendMessage(){
     input.value = ""
 }
 
-function changeRoom(event){
-    event.preventDefault()
-    const roomInputEl = document.querySelector('.changeRoomForm input')
-    const roomName = roomInputEl.value
-    //leave old room.
-    socket.emit("leave room", { username: nameOfUser , room: roomName})
+function changeRoom(newRoomInfo){
+    // event.preventDefault()
+    // const roomInputEl = document.querySelector('.changeRoomForm input')
+    // const roomName = roomInputEl.value
+    
+    //change room. enter username and new room name.
+    //(username is maybe not be needed, server is using socket.id).
+    socket.emit("change room", { username: nameOfUser , room: newRoomInfo.roomName})
+}
 
-    //join new room.
-    socket.emit("join room", { username: nameOfUser , room: roomName})
+function newRoom(event){
+    event.preventDefault()
+    const inputNewRoomEl = document.getElementById('newRoomNameIn')
+    console.log(inputNewRoomEl.value)
+    if(inputNewRoomEl.value){
+        const newRoomInfo = {roomName: inputNewRoomEl.value, password: ""}
+        changeRoom(newRoomInfo)
+    } else{
+        console.log("Enter new room name")
+    }
 }

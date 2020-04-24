@@ -28,7 +28,11 @@ function removeUserOnLeave(id){
 }
 
 function getUsers(){
-    return users
+    if(users.length > 0){
+        return users
+    } else {
+        return false
+    }
 }
 
 //Get room users
