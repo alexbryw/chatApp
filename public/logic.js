@@ -16,6 +16,8 @@ function init(){
     userForm.addEventListener('submit', onJoinRoom)
     const messageForm = document.querySelector('.messageInput')
     messageForm.addEventListener('submit', onSendMessage)
+    const messageFormInput = document.querySelector('.messageInput input')
+    messageFormInput.addEventListener('input', detectWriting)
     const newRoomForm = document.querySelector('.newRoomForm button')
     newRoomForm.addEventListener('click', newRoom)
 
@@ -79,6 +81,10 @@ function onSendMessage(event) {
     input.value = ""
 }
 
+function detectWriting() {
+    socket.emit('someone writes', true)
+}
+
 //Det här är allt som behövs för att skicka ett meddelande (client-side)
 function sendMessage(){
     let input = document.getElementById("messageInput")
@@ -86,7 +92,6 @@ function sendMessage(){
 
     //skickar meddelande
     socket.emit('message', message)
-
     input.value = ""
 }
 
@@ -99,6 +104,12 @@ function changeRoom(newRoomInfo){
     //(username is maybe not be needed, server is using socket.id).
     socket.emit("change room", { username: nameOfUser , room: newRoomInfo.roomName})
 }
+
+socket.on('writing', (writes) => {
+    console.log(writes)
+    //iom att denna bara visar output kan det bli svårt att lösa stil
+    //Lösningsförslag: timer som skriver över innerhtml varje sek
+})
 
 function newRoom(event){
     event.preventDefault()
