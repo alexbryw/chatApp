@@ -85,6 +85,7 @@ function detectWriting() {
     socket.emit('someone writes', true)
 }
 
+
 //Det här är allt som behövs för att skicka ett meddelande (client-side)
 function sendMessage(){
     let input = document.getElementById("messageInput")
@@ -107,9 +108,12 @@ function changeRoom(newRoomInfo){
 
 socket.on('writing', (writes) => {
     console.log(writes)
-    //iom att denna bara visar output kan det bli svårt att lösa stil
-    //Lösningsförslag: timer som skriver över innerhtml varje sek
+    document.querySelector('.someoneIsTyping').innerHTML = writes
 })
+
+setInterval(function(){ 
+    document.querySelector('.someoneIsTyping').innerHTML = ""
+ }, 2000);
 
 function newRoom(event){
     event.preventDefault()
