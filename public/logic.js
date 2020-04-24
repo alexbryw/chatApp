@@ -1,5 +1,7 @@
 const socket = io()
 let nameOfUser = ""
+let listOfSortedRooms = [] //backup save list if needed later
+let currentRoom = "" //TODO Set later from sortUserList, compare to nameOfUser
 
 
 
@@ -53,16 +55,20 @@ function sortUserList(data){
         console.log(room)
         if(room){
             console.log("room found, will add user to room")
+            const newUsersInRoom = room.usersInRoom
+            newUsersInRoom.push(user.username)
+            room.usersInRoom = newUsersInRoom
         } else {
             console.log("room not found will add new room and user")
             const usersInRoom = [user.username]
             const room = user.room
-            const newRoom = {roomName: user.room, usersInRoom: [user.username], password: ""}
+            const newRoom = {roomName: room, usersInRoom: usersInRoom, password: ""}
             sortedRoomList.push(newRoom)
         }
         console.log("from Sorted room list")
         console.log(sortedRoomList)
     }
+    listOfSortedRooms = [...sortedRoomList] //backup, save sorted list.
     return sortedRoomList
 
 }
