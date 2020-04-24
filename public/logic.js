@@ -18,6 +18,8 @@ function init(){
     userForm.addEventListener('submit', onJoinRoom)
     const messageForm = document.querySelector('.messageInput')
     messageForm.addEventListener('submit', onSendMessage)
+    const messageFormInput = document.querySelector('.messageInput input')
+    messageFormInput.addEventListener('input', detectWriting)
     const newRoomForm = document.querySelector('.newRoomForm button')
     newRoomForm.addEventListener('click', newRoom)
 
@@ -105,6 +107,11 @@ function onSendMessage(event) {
     input.value = ""
 }
 
+function detectWriting() {
+    socket.emit('someone writes', true)
+}
+
+
 //Det här är allt som behövs för att skicka ett meddelande (client-side)
 function sendMessage(){
     let input = document.getElementById("messageInput")
@@ -112,7 +119,6 @@ function sendMessage(){
 
     //skickar meddelande
     socket.emit('message', message)
-
     input.value = ""
 }
 
@@ -125,6 +131,15 @@ function changeRoom(newRoomInfo){
     //(username is maybe not be needed, server is using socket.id).
     socket.emit("change room", { username: nameOfUser , room: newRoomInfo.roomName})
 }
+
+socket.on('writing', (writes) => {
+    console.log(writes)
+    document.querySelector('.someoneIsTyping').innerHTML = writes
+})
+
+setInterval(function(){ 
+    document.querySelector('.someoneIsTyping').innerHTML = ""
+ }, 2000);
 
 function newRoom(event){
     event.preventDefault()
