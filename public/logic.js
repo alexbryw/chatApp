@@ -27,17 +27,18 @@ socket.on('roomList', (data) => {
     rooms = [] //Empty rooms array and fill with roomList from server.
     if(data.userList === false){
         console.log("Empty userList")
-        const newRoom = {roomName: "main", password: ""}
-        rooms.push(newRoom)
+        // const newRoom = {roomName: "main", password: ""}
+        // rooms.push(newRoom)
     } else {
-        console.log("from userList")
-        console.log(data)
-        for (const user of data.userList) {
-            console.log("User: "+ user.username + "  Room: " + user.room)
-            const newRoom = {roomName: user.room, password: ""}
-            rooms.push(newRoom)
+        rooms = sortUserList(data)
+        // console.log("from userList")
+        // console.log(data)
+        // for (const user of data.userList) {
+        //     console.log("User: "+ user.username + "  Room: " + user.room)
+        //     const newRoom = {roomName: user.room, password: ""}
+        //     rooms.push(newRoom)
 
-        }
+        // }
         listAllRooms() //Update ul list when rooms has been updated.
     }
 
@@ -45,7 +46,26 @@ socket.on('roomList', (data) => {
 
 })
 
-//socket.emit('joinRoom', {username, room})
+function sortUserList(data){
+    const sortedRoomList = []
+    for (const user of data.userList) {
+        const room = sortedRoomList.find(room => room.roomName === user.room)
+        console.log(room)
+        if(room){
+            console.log("room found, will add user to room")
+        } else {
+            console.log("room not found will add new room and user")
+            const usersInRoom = [user.username]
+            const room = user.room
+            const newRoom = {roomName: user.room, usersInRoom: [user.username], password: ""}
+            sortedRoomList.push(newRoom)
+        }
+        console.log("from Sorted room list")
+        console.log(sortedRoomList)
+    }
+    return sortedRoomList
+
+}
 
 socket.on('message', (message) => {
     const list = document.querySelector('.chatMessages')

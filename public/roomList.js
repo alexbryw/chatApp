@@ -1,23 +1,23 @@
 let rooms = [
-    {
-        roomName: "grejer",
-        password: "korv"
-    },{
-        roomName: "saker",
-        password: ""
-    },{
-        roomName: "bös",
-        password: "korv"
-    },{
-        roomName: "ting",
-        password: ""
-    },{
-        roomName: "stuff",
-        password: "korv"
-    },{
-        roomName: "mojs",
-        password: ""
-    }
+    // {
+    //     roomName: "grejer",
+    //     password: "korv"
+    // },{
+    //     roomName: "saker",
+    //     password: ""
+    // },{
+    //     roomName: "bös",
+    //     password: "korv"
+    // },{
+    //     roomName: "ting",
+    //     password: ""
+    // },{
+    //     roomName: "stuff",
+    //     password: "korv"
+    // },{
+    //     roomName: "mojs",
+    //     password: ""
+    // }
 ]
 
 function listAllRooms(){
