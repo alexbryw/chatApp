@@ -86,6 +86,36 @@ io.on('connection', (socket) => {
     io.emit('roomList',{userList: getUsers()})
 })
 
+// let users = [
+//     {
+//         id: "97v9ds8f7fd89",
+//         name: "Victor"
+//     }
+// ]
+
+// function getAllRoomsWithClients() {
+//     var availableRooms = [];
+//     var rooms = io.sockets.adapter.rooms;
+//     if (rooms) {
+//         for (var room in rooms) {
+//             if (!rooms[room].hasOwnProperty(room)) {
+
+//                 let roomToPush = {
+//                     name: "General",
+//                     users: [
+//                         "Victor",
+//                         "Johan"
+//                     ]
+//                 }
+
+//                 availableRooms.push(room);
+
+//             }
+//         }
+//     }
+//     return availableRooms;
+// }
+
 http.listen(port, () => {
     console.log(`Listening on http://localhost:${port}`)
 })
