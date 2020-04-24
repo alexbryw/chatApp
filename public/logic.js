@@ -1,6 +1,7 @@
 const socket = io()
 let nameOfUser = ""
-
+let listOfSortedRooms = [] //backup save list if needed later
+let currentRoom = "" //TODO Set later from sortUserList, compare to nameOfUser
 
 
 /* const {username, room} = Qs.parse(location.search, {
@@ -13,9 +14,11 @@ window.addEventListener('load', () =>{
 
 function init(){
     const userForm = document.querySelector('.join.ui')
-    userForm.addEventListener('submit', onJoinRoom)
+    userForm.addEventListener('submit', getUserList)
     const messageForm = document.querySelector('.messageInput')
     messageForm.addEventListener('submit', onSendMessage)
+    const messageFormInput = document.querySelector('.messageInput input')
+    messageFormInput.addEventListener('input', detectWriting)
     const newRoomForm = document.querySelector('.newRoomForm button')
     newRoomForm.addEventListener('click', newRoom)
 
@@ -26,14 +29,10 @@ function init(){
 socket.on('roomList', (data) => {
     rooms = [] //Empty rooms array and fill with roomList from server.
     if(data.userList === false){
-        console.log("Empty userList")
         const newRoom = {roomName: "main", password: ""}
         rooms.push(newRoom)
     } else {
-        console.log("from userList")
-        console.log(data)
         for (const user of data.userList) {
-            console.log("User: "+ user.username + "  Room: " + user.room)
             const newRoom = {roomName: user.room, password: ""}
             rooms.push(newRoom)
 
@@ -45,7 +44,45 @@ socket.on('roomList', (data) => {
 
 })
 
-//socket.emit('joinRoom', {username, room})
+function sortUserList(data){
+    const sortedRoomList = []
+    for (const user of data.userList) {
+        setCurrentRoom(user) //see if user has changed room and update currentRoom.
+        const room = sortedRoomList.find(room => room.roomName === user.room)
+        console.log(room)
+        if(room){
+            console.log("room found, will add user to room")
+            const newUsersInRoom = room.usersInRoom
+            newUsersInRoom.push(user.username)
+            room.usersInRoom = newUsersInRoom
+        } else {
+            console.log("room not found will add new room and user")
+            const usersInRoom = [user.username]
+            const room = user.room
+            const newRoom = {roomName: room, usersInRoom: usersInRoom, password: ""}
+            sortedRoomList.push(newRoom)
+        }
+        console.log("from Sorted room list")
+        console.log(sortedRoomList)
+    }
+    listOfSortedRooms = [...sortedRoomList] //backup, save sorted list.
+    return sortedRoomList
+
+}
+
+//could use socket.id if multiple users have the same name.
+function setCurrentRoom(user){
+    if(user.username === nameOfUser){
+        if(currentRoom !== user.room){
+            currentRoom = user.room
+            console.log("Updated current room: " + currentRoom)
+            const chatListEl = document.querySelector(".chatMessages")
+            const li = document.createElement('li')
+            li.innerText = "Current Room: " + currentRoom
+            chatListEl.append(li)
+        }
+    }
+}
 
 socket.on('message', (message) => {
     const list = document.querySelector('.chatMessages')
@@ -57,20 +94,44 @@ socket.on('message', (message) => {
     list.appendChild(listItem)
 } )
 
-function onJoinRoom(event){
+
+function getUserList(event){
     event.preventDefault()
-    const joinModal = document.querySelector('.joinChatModal')
-    joinModal.classList.add('hidden')
+    socket.emit('get userlist', true)
+}
+
+socket.on('post userlist', (data) => {
+    onJoinRoom(data)
+})
+
+function onJoinRoom(data){
     const usernameInput = document.querySelector('#username')
     const username = usernameInput.value
-    nameOfUser = usernameInput.value
     const selectedColor = document.querySelector('#selectedColor')
     color = selectedColor.value
+    
+    let usedName = false
+    if(data === false){
+        usedName = false
+    } else {
+        for (const otherUser of data) {
+            if(otherUser.username === username){
+                usedName = true
+                break
+            }
+        }
+    }
+    
+    if(usedName){
+        document.querySelector('.usernameTaken').innerHTML = "Username Taken"
+    } else {
+        const joinModal = document.querySelector('.joinChatModal')
+        joinModal.classList.add('hidden')
+        nameOfUser = usernameInput.value
 
-    const room = 'main'
-
-    socket.emit('join room', { username, color, room })
-    console.log(room)
+        const room = 'main'
+        socket.emit('join room', { username, color, room })
+    }
 }
 
 function onSendMessage(event) {
@@ -82,6 +143,11 @@ function onSendMessage(event) {
     input.value = ""
 }
 
+function detectWriting() {
+    socket.emit('someone writes', true)
+}
+
+
 //Det här är allt som behövs för att skicka ett meddelande (client-side)
 /* function sendMessage(){
     let input = document.getElementById("messageInput")
@@ -89,7 +155,6 @@ function onSendMessage(event) {
 
     //skickar meddelande
     socket.emit('message', message)
-
     input.value = ""
 } */
 
@@ -102,6 +167,15 @@ function changeRoom(newRoomInfo){
     //(username is maybe not be needed, server is using socket.id).
     socket.emit("change room", { username: nameOfUser , room: newRoomInfo.roomName})
 }
+
+socket.on('writing', (writes) => {
+    console.log(writes)
+    document.querySelector('.someoneIsTyping').innerHTML = writes
+})
+
+setInterval(function(){ 
+    document.querySelector('.someoneIsTyping').innerHTML = ""
+ }, 2000);
 
 function newRoom(event){
     event.preventDefault()

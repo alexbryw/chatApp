@@ -9,8 +9,14 @@ const {userJoin, removeUserOnLeave, getCurrentUser, getUsers} = require('./utils
 
 app.use(express.static('public'))
 
+
 io.on('connection', (socket) => {
     console.log('User connected')
+
+    socket.on('get userlist', (checkRequest) => {
+        getUsers()
+        socket.emit('post userlist', getUsers())
+    })
 
     socket.on('join room', ({username, color, room}) => {
         console.log("from join room")
@@ -56,6 +62,12 @@ io.on('connection', (socket) => {
         io.to(user.room).emit('message', {color: user.color, message: `${user.username}: ${message}`})
     })
 
+    socket.on('someone writes', (writing) => {
+        const user = getCurrentUser(socket.id)
+        socket.broadcast.to(user.room).emit('writing', `${user.username} writes...`)
+
+    })
+
     //runs when clientdisconnect
     socket.on('disconnect', () => {
         //Check which user that leaves
@@ -73,6 +85,36 @@ io.on('connection', (socket) => {
     //Send userList to all on connect.
     io.emit('roomList',{userList: getUsers()})
 })
+
+// let users = [
+//     {
+//         id: "97v9ds8f7fd89",
+//         name: "Victor"
+//     }
+// ]
+
+// function getAllRoomsWithClients() {
+//     var availableRooms = [];
+//     var rooms = io.sockets.adapter.rooms;
+//     if (rooms) {
+//         for (var room in rooms) {
+//             if (!rooms[room].hasOwnProperty(room)) {
+
+//                 let roomToPush = {
+//                     name: "General",
+//                     users: [
+//                         "Victor",
+//                         "Johan"
+//                     ]
+//                 }
+
+//                 availableRooms.push(room);
+
+//             }
+//         }
+//     }
+//     return availableRooms;
+// }
 
 http.listen(port, () => {
     console.log(`Listening on http://localhost:${port}`)

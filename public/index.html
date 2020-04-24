@@ -15,7 +15,8 @@
   <div class = "joinChatModal">
     <form class="join ui">
       <h2>Welcome to ChatApp</h2>
-      <input type="text" placeholder="Enter your nic" id= "username" required>
+      <p class="usernameTaken"></p>
+      <input type="text" placeholder="Enter your nick" id="username" required>
       <p>Pick a color</p>
       <select id ="selectedColor">
         <option value="red">red</option>
@@ -32,6 +33,7 @@
     <ul class = "chatMessages">
       <!--MESSAGES GOES HERE-->
     </ul>
+    <p class="someoneIsTyping"></p>
     <form class ="messageInput">
       <input type="text" placeholder="type a message" required>
       <button>Send</button>

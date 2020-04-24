@@ -1,23 +1,23 @@
 let rooms = [
-    {
-        roomName: "grejer",
-        password: "korv"
-    },{
-        roomName: "saker",
-        password: ""
-    },{
-        roomName: "bös",
-        password: "korv"
-    },{
-        roomName: "ting",
-        password: ""
-    },{
-        roomName: "stuff",
-        password: "korv"
-    },{
-        roomName: "mojs",
-        password: ""
-    }
+    // {
+    //     roomName: "grejer",
+    //     password: "korv"
+    // },{
+    //     roomName: "saker",
+    //     password: ""
+    // },{
+    //     roomName: "bös",
+    //     password: "korv"
+    // },{
+    //     roomName: "ting",
+    //     password: ""
+    // },{
+    //     roomName: "stuff",
+    //     password: "korv"
+    // },{
+    //     roomName: "mojs",
+    //     password: ""
+    // }
 ]
 
 function listAllRooms(){
@@ -57,13 +57,17 @@ function listAllRooms(){
 
 
 
-function selectPublicRoom(newRoomInfo){
-    console.log(newRoomInfo)
-    changeRoom(newRoomInfo)
+function selectPublicRoom(room){
+    console.log(room)
+    changeRoom(room)
 }
 
-function selectPrivateRoom(korv){
-    //titta på lösenord-kod här
-    console.log(korv)
-}
+function selectPrivateRoom(room){
+    var passwordInput = prompt("Please enter your name", "");
 
+    if (passwordInput === room.password) {
+        console.log(room)
+    } else {
+        alert("Wrong password")
+    }
+}
