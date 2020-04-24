@@ -56,6 +56,12 @@ io.on('connection', (socket) => {
         io.to(user.room).emit('message', `${user.username}: ${message}`)
     })
 
+    socket.on('someone writes', (writing) => {
+        const user = getCurrentUser(socket.id)
+        socket.broadcast.to(user.room).emit('writing', `${user.username} writes...`)
+
+    })
+
     //runs when clientdisconnect
     socket.on('disconnect', () => {
         //Check which user that leaves

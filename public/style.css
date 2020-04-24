@@ -107,6 +107,12 @@ li{
     font-size: 1.5rem;
 }
 
+.someoneIsTyping {
+    color: greenyellow;
+    font-size: 1.5rem;
+    margin: 1em;
+}
+
 .messageInput {
     display:flex;
     border: 1px solid yellowgreen
