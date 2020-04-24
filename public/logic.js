@@ -2,7 +2,6 @@ const socket = io()
 let nameOfUser = ""
 
 
-
 /* const {username, room} = Qs.parse(location.search, {
     ignoreQueryPrefix: true
 }) */
@@ -13,7 +12,7 @@ window.addEventListener('load', () =>{
 
 function init(){
     const userForm = document.querySelector('.join.ui')
-    userForm.addEventListener('submit', onJoinRoom)
+    userForm.addEventListener('submit', getUserList)
     const messageForm = document.querySelector('.messageInput')
     messageForm.addEventListener('submit', onSendMessage)
     const messageFormInput = document.querySelector('.messageInput input')
@@ -28,14 +27,10 @@ function init(){
 socket.on('roomList', (data) => {
     rooms = [] //Empty rooms array and fill with roomList from server.
     if(data.userList === false){
-        console.log("Empty userList")
         const newRoom = {roomName: "main", password: ""}
         rooms.push(newRoom)
     } else {
-        console.log("from userList")
-        console.log(data)
         for (const user of data.userList) {
-            console.log("User: "+ user.username + "  Room: " + user.room)
             const newRoom = {roomName: user.room, password: ""}
             rooms.push(newRoom)
 
@@ -58,18 +53,41 @@ socket.on('message', (message) => {
     list.appendChild(listItem)
 } )
 
-function onJoinRoom(event){
+
+function getUserList(event){
     event.preventDefault()
-    const joinModal = document.querySelector('.joinChatModal')
-    joinModal.classList.add('hidden')
+    socket.emit('get userlist', true)
+}
+
+socket.on('post userlist', (data) => {
+    onJoinRoom(data)
+})
+
+function onJoinRoom(data){
     const usernameInput = document.querySelector('#username')
     const username = usernameInput.value
-    nameOfUser = usernameInput.value
-
-    const room = 'main'
-
-    socket.emit('join room', { username, room })
-    console.log(room)
+    
+    let usedName = false
+    if(data === false){
+        usedName = false
+    } else {
+        for (const otherUser of data) {
+            if(otherUser.username === username){
+                usedName = true
+                break
+            }
+        }
+    }
+    
+    if(usedName){
+        document.querySelector('.usernameTaken').innerHTML = "Username Taken"
+    } else {
+        const joinModal = document.querySelector('.joinChatModal')
+        joinModal.classList.add('hidden')
+        nameOfUser = usernameInput.value
+        const room = 'main'
+        socket.emit('join room', { username, room })
+    }
 }
 
 function onSendMessage(event) {

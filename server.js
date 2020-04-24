@@ -9,8 +9,14 @@ const {userJoin, removeUserOnLeave, getCurrentUser, getUsers} = require('./utils
 
 app.use(express.static('public'))
 
+
 io.on('connection', (socket) => {
     console.log('User connected')
+
+    socket.on('get userlist', (checkRequest) => {
+        getUsers()
+        socket.emit('post userlist', getUsers())
+    })
 
     socket.on('join room', ({username, room}) => {
         console.log("from join room")
