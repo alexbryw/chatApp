@@ -53,6 +53,7 @@ socket.on('roomList', (data) => {
 function sortUserList(data){
     const sortedRoomList = []
     for (const user of data.userList) {
+        setCurrentRoom(user) //see if user has changed room and update currentRoom.
         const room = sortedRoomList.find(room => room.roomName === user.room)
         console.log(room)
         if(room){
@@ -73,6 +74,20 @@ function sortUserList(data){
     listOfSortedRooms = [...sortedRoomList] //backup, save sorted list.
     return sortedRoomList
 
+}
+
+//could use socket.id if multiple users have the same name.
+function setCurrentRoom(user){
+    if(user.username === nameOfUser){
+        if(currentRoom !== user.room){
+            currentRoom = user.room
+            console.log("Updated current room: " + currentRoom)
+            const chatListEl = document.querySelector(".chatMessages")
+            const li = document.createElement('li')
+            li.innerText = "Current Room: " + currentRoom
+            chatListEl.append(li)
+        }
+    }
 }
 
 socket.on('message', (message) => {
