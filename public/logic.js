@@ -88,7 +88,8 @@ socket.on('message', (message) => {
     const list = document.querySelector('.chatMessages')
 
     const listItem = document.createElement('li')
-    listItem.innerText = message
+    listItem.setAttribute('class', `${message.color}Text`)
+    listItem.innerText = message.message
 
     list.appendChild(listItem)
 } )
@@ -106,6 +107,8 @@ socket.on('post userlist', (data) => {
 function onJoinRoom(data){
     const usernameInput = document.querySelector('#username')
     const username = usernameInput.value
+    const selectedColor = document.querySelector('#selectedColor')
+    color = selectedColor.value
     
     let usedName = false
     if(data === false){
@@ -125,8 +128,9 @@ function onJoinRoom(data){
         const joinModal = document.querySelector('.joinChatModal')
         joinModal.classList.add('hidden')
         nameOfUser = usernameInput.value
+
         const room = 'main'
-        socket.emit('join room', { username, room })
+        socket.emit('join room', { username, color, room })
     }
 }
 
@@ -146,14 +150,14 @@ function detectWriting() {
 
 
 //Det här är allt som behövs för att skicka ett meddelande (client-side)
-function sendMessage(){
+/* function sendMessage(){
     let input = document.getElementById("messageInput")
     let message = input.value
 
     //skickar meddelande
     socket.emit('message', message)
     input.value = ""
-}
+} */
 
 function changeRoom(newRoomInfo){
     // event.preventDefault()
@@ -177,6 +181,7 @@ setInterval(function(){
 function newRoom(event){
     event.preventDefault()
     const inputNewRoomEl = document.getElementById('newRoomNameIn')
+    const inputNewRoomPassword = document.getElementById('newRoomPasswordIn')
     console.log(inputNewRoomEl.value)
     if(inputNewRoomEl.value){
         const newRoomInfo = {roomName: inputNewRoomEl.value, password: ""}
@@ -184,4 +189,6 @@ function newRoom(event){
     } else{
         console.log("Enter new room name")
     }
+    inputNewRoomEl.value = ""
+    inputNewRoomPassword.value = ""
 }

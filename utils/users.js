@@ -1,10 +1,11 @@
 const users = []
 
 //Join user to chat, (Room can be set later?)
-function userJoin( id, username, room){
+function userJoin( id, username, color, room){
     const user = { 
         id, 
         username,
+        color,
         room 
     }
 
