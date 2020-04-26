@@ -135,6 +135,7 @@ function onSendMessage(event) {
     console.log('I am clicked!')
     
     const input = document.querySelector('.messageInput input')
+    getImage(input)
     socket.emit('message', input.value)
     input.value = ""
 }
