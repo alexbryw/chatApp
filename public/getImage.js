@@ -21,9 +21,6 @@ async function sendForAPI(wordCheck){
                 let imgURL = response.data[0].images.downsized.url
                 let imgTitle = response.data[0].images.downsized.title
                 imgHTML = `<img class="importedImage" src="${imgURL}" alt="${imgTitle}">`
-
-                console.log(response)
-
                 wordCheck[i] = imgHTML
             }
             catch(error) {
@@ -38,8 +35,8 @@ async function sendForAPI(wordCheck){
 }
 
 function sendMessage(message){
-    //message.replaceAll('(?i)<(?!img|/img).*?>', '');
-    socket.emit('message', message)
+    const newMessage = message.replace(/(<((?!img)[^>]+)>)/ig, '');
+    socket.emit('message', newMessage)
     const input = document.querySelector('.messageInput input')
     input.value = ""
 }
