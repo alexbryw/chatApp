@@ -89,7 +89,7 @@ socket.on('message', (message) => {
 
     const listItem = document.createElement('li')
     listItem.setAttribute('class', `${message.color}Text`)
-    listItem.innerText = message.message
+    listItem.innerHTML = message.message
 
     list.appendChild(listItem)
 } )
@@ -135,12 +135,9 @@ function onJoinRoom(data){
 }
 
 function onSendMessage(event) {
-    event.preventDefault()
-    console.log('I am clicked!')
-    
+    event.preventDefault()    
     const input = document.querySelector('.messageInput input')
-    socket.emit('message', input.value)
-    input.value = ""
+    checkForDashes(input.value)
 }
 
 function detectWriting() {
