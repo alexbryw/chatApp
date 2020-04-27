@@ -20,7 +20,7 @@ async function sendForAPI(wordCheck){
         
                 let imgURL = response.data[0].images.downsized.url
                 let imgTitle = response.data[0].images.downsized.title
-                imgHTML = `<img class="importedImage" src="${imgURL}" alt="${imgTitle}">`
+                imgHTML = `<img class="importedImage" src="${imgURL}" alt="${imgTitle} image">`
                 wordCheck[i] = imgHTML
             }
             catch(error) {
@@ -38,5 +38,5 @@ function sendMessage(message){
     const newMessage = message.replace(/(<((?!img)[^>]+)>)/ig, '');
     socket.emit('message', newMessage)
     const input = document.querySelector('.messageInput input')
-    input.value = ""
+    input.value = "" 
 }
