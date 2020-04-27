@@ -109,18 +109,20 @@ function getAllRoomsWithClients() {
         // console.log("from top all rooms")
         for (const room in rooms) {
             // console.log(rooms[room].sockets)
-            const users = []
+            const usersInRoom = []
             for (const id in rooms[room].sockets) {
                 if (rooms[room].sockets.hasOwnProperty(id)) {
                     // console.log(id)
                     // console.log("id per user")
-                    users.push({id: id, name: ""}) //add username later
+                    const user = getUsers().find(user => user.id === id)
+                    usersInRoom.push({id: id, name: user.username, color: user.color}) //add username later
 
                 }
             }
             const newRoom = {
                 roomName: room,
-                users: users
+                roomPassword: "",
+                users: usersInRoom
             }
             availableRooms.push(newRoom)
 
