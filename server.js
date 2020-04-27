@@ -12,6 +12,7 @@ app.use(express.static('public'))
 
 io.on('connection', (socket) => {
     console.log('User connected')
+    socket.leaveAll()
 
     socket.on('get userlist', (checkRequest) => {
         getUsers()
@@ -20,12 +21,16 @@ io.on('connection', (socket) => {
 
     socket.on('join room', ({username, color, room}) => {
         console.log("from join room")
+        getAllRoomsWithClients() //test
         const user = userJoin(socket.id, username, color, room)
         
         //Send userList to all users when new user joins.
         io.emit('roomList',{userList: getUsers()}) 
         console.log(getUsers())
+        socket.leaveAll()// User leaves all rooms. //test
         socket.join(user.room)
+        // console.log(io.sockets.adapter.rooms)
+        getAllRoomsWithClients() //test
         console.log("userName: " + username)
 
         socket.emit('message', {color: 'green', message: `Welcome ${username}`})
@@ -48,6 +53,7 @@ io.on('connection', (socket) => {
             //Send updated room/user list to all clients on roomList.
             io.emit('roomList',{userList: getUsers()})
         }
+        getAllRoomsWithClients() //test
 
     })
 /* 
@@ -93,28 +99,53 @@ io.on('connection', (socket) => {
 //     }
 // ]
 
-// function getAllRoomsWithClients() {
-//     var availableRooms = [];
-//     var rooms = io.sockets.adapter.rooms;
-//     if (rooms) {
-//         for (var room in rooms) {
-//             if (!rooms[room].hasOwnProperty(room)) {
+function getAllRoomsWithClients() {
+    const availableRooms = []
+    // console.log(Object.keys(io.sockets.adapter.rooms))
+    // console.log("hej")
+    const rooms = io.sockets.adapter.rooms
+    if (rooms) {
+        // console.log(rooms)
+        // console.log("from top all rooms")
+        for (const room in rooms) {
+            // console.log(rooms[room].sockets)
+            const users = []
+            for (const id in rooms[room].sockets) {
+                if (rooms[room].sockets.hasOwnProperty(id)) {
+                    // console.log(id)
+                    // console.log("id per user")
+                    users.push({id: id, name: ""}) //add username later
 
-//                 let roomToPush = {
-//                     name: "General",
-//                     users: [
-//                         "Victor",
-//                         "Johan"
-//                     ]
-//                 }
+                }
+            }
+            const newRoom = {
+                roomName: room,
+                users: users
+            }
+            availableRooms.push(newRoom)
 
-//                 availableRooms.push(room);
+            // console.log("room before if")
+            // if (!rooms[room].hasOwnProperty(room)) {
+            //     console.log(room)
+            //     console.log("end line")
 
-//             }
-//         }
-//     }
-//     return availableRooms;
-// }
+                // let roomToPush = {
+                //     name: "General",
+                //     users: [
+                //         "Victor",
+                //         "Johan"
+                //     ]
+                // }
+
+                // availableRooms.push(room);
+
+            // }
+        }
+    }
+    // return availableRooms
+    console.log(availableRooms)
+    console.log(availableRooms[0])
+}
 
 http.listen(port, () => {
     console.log(`Listening on http://localhost:${port}`)
