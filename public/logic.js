@@ -25,6 +25,11 @@ function init(){
     listAllRooms()
 }
 
+socket.on('newRoomList', (data) => {
+    console.log(data)
+    console.log("from newRoomList")
+})
+
 //New user/room list sent here on every change in list.
 socket.on('roomList', (data) => {
     rooms = [] //Empty rooms array and fill with roomList from server.

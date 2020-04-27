@@ -25,12 +25,13 @@ io.on('connection', (socket) => {
         const user = userJoin(socket.id, username, color, room)
         
         //Send userList to all users when new user joins.
-        io.emit('roomList',{userList: getUsers()}) 
+        io.emit('roomList',{userList: getUsers()})
+        io.emit('newRoomList', {newRoomList: getAllRoomsWithClients()}) 
         console.log(getUsers())
         socket.leaveAll()// User leaves all rooms. //test
         socket.join(user.room)
         // console.log(io.sockets.adapter.rooms)
-        getAllRoomsWithClients() //test
+        // getAllRoomsWithClients() //test
         console.log("userName: " + username)
 
         socket.emit('message', {color: 'green', message: `Welcome ${username}`})
@@ -52,8 +53,9 @@ io.on('connection', (socket) => {
             
             //Send updated room/user list to all clients on roomList.
             io.emit('roomList',{userList: getUsers()})
+            io.emit('newRoomList', {newRoomList: getAllRoomsWithClients()})
         }
-        getAllRoomsWithClients() //test
+        // getAllRoomsWithClients() //test
 
     })
 /* 
@@ -83,6 +85,7 @@ io.on('connection', (socket) => {
             io.to(user.room).emit('message', {color: 'green', message: `${user.username} has left the chat`})
             //Update all connected clients of the new user/room list.
             io.emit('roomList',{userList: getUsers()})
+            io.emit('newRoomList', {newRoomList: getAllRoomsWithClients()})
         }
         
         console.log("someone disconnected.")
@@ -90,6 +93,7 @@ io.on('connection', (socket) => {
 
     //Send userList to all on connect.
     io.emit('roomList',{userList: getUsers()})
+    io.emit('newRoomList', {newRoomList: getAllRoomsWithClients()})
 })
 
 // let users = [
@@ -102,20 +106,17 @@ io.on('connection', (socket) => {
 function getAllRoomsWithClients() {
     const availableRooms = []
     // console.log(Object.keys(io.sockets.adapter.rooms))
-    // console.log("hej")
     const rooms = io.sockets.adapter.rooms
     if (rooms) {
         // console.log(rooms)
-        // console.log("from top all rooms")
         for (const room in rooms) {
             // console.log(rooms[room].sockets)
             const usersInRoom = []
             for (const id in rooms[room].sockets) {
                 if (rooms[room].sockets.hasOwnProperty(id)) {
                     // console.log(id)
-                    // console.log("id per user")
-                    const user = getUsers().find(user => user.id === id)
-                    usersInRoom.push({id: id, name: user.username, color: user.color}) //add username later
+                    const user = getUsers().find(user => user.id === id) //find user by socket.id.
+                    usersInRoom.push({id: id, name: user.username, color: user.color})
 
                 }
             }
@@ -126,27 +127,11 @@ function getAllRoomsWithClients() {
             }
             availableRooms.push(newRoom)
 
-            // console.log("room before if")
-            // if (!rooms[room].hasOwnProperty(room)) {
-            //     console.log(room)
-            //     console.log("end line")
-
-                // let roomToPush = {
-                //     name: "General",
-                //     users: [
-                //         "Victor",
-                //         "Johan"
-                //     ]
-                // }
-
-                // availableRooms.push(room);
-
-            // }
         }
     }
-    // return availableRooms
-    console.log(availableRooms)
-    console.log(availableRooms[0])
+    // console.log(availableRooms)
+    // console.log(availableRooms[0])
+    return availableRooms
 }
 
 http.listen(port, () => {
