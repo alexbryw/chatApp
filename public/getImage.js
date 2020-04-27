@@ -1,22 +1,44 @@
+
 function checkForDashes(message){
     requestsAPI = message.includes('/')
     if(requestsAPI){
-        let wordCheck
-        wordCheck = message.split(" ")
-        for (let i = 0; i < wordCheck.length; i++) {
-            let ifcludesDash = wordCheck[i].charAt(0)
-            if(ifcludesDash == '/'){
-                wordCheck[i] = sendForAPI(wordCheck[i].substring(1))
-            }
-        }
-
-        message = wordCheck.join(' ')
-    }
-    
-    return message
+        let wordCheckArray = message.split(" ")
+        sendForAPI(wordCheckArray)
+    } else {
+        sendMessage(message)
+    } 
 }
 
-function sendForAPI(word){
-    word = 'korv'
-    return word
+async function sendForAPI(wordCheck){
+    for (let i = 0; i < wordCheck.length; i++) {
+        let includesDash = wordCheck[i].charAt(0)
+        if(includesDash == '/'){
+            try{    
+                let response = await fetch(`https://api.giphy.com/v1/gifs/search?api_key=LG8XDGkXtIyyZNJyMUjroUYM1G9wDnMP&q=`+
+                            `${wordCheck[i].substring(1)}&limit=1&offset=0&rating=G&lang=en`)
+                    .then(res => res.json())
+        
+                let imgURL = response.data[0].images.downsized.url
+                let imgTitle = response.data[0].images.downsized.title
+                imgHTML = `<img class="importedImage" src="${imgURL}" alt="${imgTitle}">`
+
+                console.log(response)
+
+                wordCheck[i] = imgHTML
+            }
+            catch(error) {
+                console.warn(`ERROR: ${error}`)
+                wordCheck[i] = `<img class="importedImage" src="https://giffiles.alphacoders.com/354/35481.gif" alt="error image">`
+            }
+            finally {
+            }
+        }
+    }
+    sendMessage(wordCheck.join(' '))
+}
+
+function sendMessage(message){
+    const input = document.querySelector('.messageInput input')
+    socket.emit('message', message)
+    input.value = ""
 }

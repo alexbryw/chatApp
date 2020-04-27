@@ -107,6 +107,11 @@ li{
     display:none;
 }
 
+.importedImage{
+    max-width: 5em;
+    max-height: 5em;
+}
+
 .chatUI{
     background-color: black;
     display: flex;
