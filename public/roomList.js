@@ -27,9 +27,9 @@ function listAllRooms(){
     // Checks if there is a password then split the code
     for(let i = 0; i < rooms.length; i++){
         if(rooms[i].password === ""){
-            publicRoomArray.push(rooms[i])
-        } else {
             privateRoomArray.push(rooms[i])
+        } else {
+            publicRoomArray.push(rooms[i])
         }
     }
     const publicRoomList = document.querySelector('.publicRoomList')
@@ -43,6 +43,15 @@ function listAllRooms(){
         li.innerHTML = publicRoomArray[i].roomName
         li.setAttribute("onClick", `selectPublicRoom(${ data })`)
         publicRoomList.appendChild(li)
+        
+        let nameUl = document.createElement('ul')
+        for (const user of publicRoomArray[i].users) { //loop out all users in room.
+            console.log(user.name + " " + publicRoomArray[i].roomName)
+            let nameLi = document.createElement("li")
+            nameLi.innerHTML = user.name
+            nameUl.appendChild(nameLi)
+        }
+        publicRoomList.appendChild(nameUl)
     }
 
     for(let i = 0; i < privateRoomArray.length; i++){
