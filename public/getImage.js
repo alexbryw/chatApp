@@ -38,7 +38,8 @@ async function sendForAPI(wordCheck){
 }
 
 function sendMessage(message){
-    const input = document.querySelector('.messageInput input')
+    //message.replaceAll('(?i)<(?!img|/img).*?>', '');
     socket.emit('message', message)
+    const input = document.querySelector('.messageInput input')
     input.value = ""
 }
