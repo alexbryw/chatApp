@@ -7,6 +7,7 @@ const port = 3000
 
 const {userJoin, removeUserOnLeave, getCurrentUser, getUsers} = require('./utils/users')
 
+let roomPasswordList = [] 
 let roomList = [] //not used only backup
 
 app.use(express.static('public'))
@@ -43,8 +44,8 @@ io.on('connection', (socket) => {
     })
 
     //Leave old room and join the new room and update room in users.
-    socket.on('change room', ({username, room}) => {
-        console.log(username, room)
+    socket.on('change room', ({username, room, password}) => {
+        console.log(username, room, password)
         const user = getCurrentUser(socket.id)
 
         if(user){
@@ -60,6 +61,29 @@ io.on('connection', (socket) => {
         }
         // getAllRoomsWithClients() //test
 
+    })
+
+    socket.on('new room', ({username, room, password}) => {
+        if(room){
+            const roomFound = getAllRoomsWithClients().find(({ roomName }) => roomName === room)
+            // console.log(getAllRoomsWithClients())
+            console.log(roomFound)
+            if(roomFound){
+                console.log("room already exists will not add new room or password")
+                //extra TODO send error: cant add room that already exists
+            } else {
+                console.log("room not found, will add new room and maybe password")
+                const newRoom = {roomName: room, password: password}
+                roomPasswordList.push(newRoom)
+                socket.leaveAll()
+                socket.join(room)
+                io.emit('newRoomList', getAllRoomsWithClients())
+
+            }
+            console.log(roomPasswordList)
+            //TODO remove empty rooms from password list.
+            //TODO add password check in changeRoom
+        }
     })
 /* 
     socket.on('message', (message) => {
@@ -122,10 +146,18 @@ function getAllRoomsWithClients() {
                     usersInRoom.push({id: id, name: user.username, color: user.color})
                 }
             }
+
+            //Check if room has password and set to true or false in newRoom object below.
+            const roomFromPasswordList = roomPasswordList.find(({ roomName }) => roomName === room)
+            let isPassword = false
+            if(roomFromPasswordList){
+                roomFromPasswordList.password ? isPassword = true : isPassword = false
+            }
+            
             const newRoom = {
-                roomName: room,
-                roomPassword: "",
-                users: usersInRoom
+                roomName: room, //Room name.
+                roomPassword: isPassword, //Boolean true or false if room is password protected.
+                users: usersInRoom //Array of users
             }
             availableRooms.push(newRoom)
         }
