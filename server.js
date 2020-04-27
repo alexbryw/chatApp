@@ -7,12 +7,15 @@ const port = 3000
 
 const {userJoin, removeUserOnLeave, getCurrentUser, getUsers} = require('./utils/users')
 
+let roomList = [] //not used only backup
+
 app.use(express.static('public'))
 
 
 io.on('connection', (socket) => {
     console.log('User connected')
     socket.leaveAll()
+    socket.join('main')
 
     socket.on('get userlist', (checkRequest) => {
         getUsers()
@@ -21,15 +24,15 @@ io.on('connection', (socket) => {
 
     socket.on('join room', ({username, color, room}) => {
         console.log("from join room")
-        getAllRoomsWithClients() //test
+        // getAllRoomsWithClients() //test
         const user = userJoin(socket.id, username, color, room)
         
         //Send userList to all users when new user joins.
-        io.emit('roomList',{userList: getUsers()})
-        io.emit('newRoomList', {newRoomList: getAllRoomsWithClients()}) 
+        // io.emit('roomList',{userList: getUsers()})
         console.log(getUsers())
         socket.leaveAll()// User leaves all rooms. //test
         socket.join(user.room)
+        io.emit('newRoomList', getAllRoomsWithClients())
         // console.log(io.sockets.adapter.rooms)
         // getAllRoomsWithClients() //test
         console.log("userName: " + username)
@@ -52,8 +55,8 @@ io.on('connection', (socket) => {
             socket.broadcast.to(user.room).emit('message', {color: 'green', message: `${username} has joined the chat`})
             
             //Send updated room/user list to all clients on roomList.
-            io.emit('roomList',{userList: getUsers()})
-            io.emit('newRoomList', {newRoomList: getAllRoomsWithClients()})
+            // io.emit('roomList',{userList: getUsers()})
+            io.emit('newRoomList', getAllRoomsWithClients())
         }
         // getAllRoomsWithClients() //test
 
@@ -85,15 +88,15 @@ io.on('connection', (socket) => {
             io.to(user.room).emit('message', {color: 'green', message: `${user.username} has left the chat`})
             //Update all connected clients of the new user/room list.
             io.emit('roomList',{userList: getUsers()})
-            io.emit('newRoomList', {newRoomList: getAllRoomsWithClients()})
+            io.emit('newRoomList', getAllRoomsWithClients())
         }
         
         console.log("someone disconnected.")
     })
 
     //Send userList to all on connect.
-    io.emit('roomList',{userList: getUsers()})
-    io.emit('newRoomList', {newRoomList: getAllRoomsWithClients()})
+    // io.emit('roomList',{userList: getUsers()})
+    // io.emit('newRoomList', {roomList: getAllRoomsWithClients()})
 })
 
 // let users = [
@@ -115,9 +118,8 @@ function getAllRoomsWithClients() {
             for (const id in rooms[room].sockets) {
                 if (rooms[room].sockets.hasOwnProperty(id)) {
                     // console.log(id)
-                    const user = getUsers().find(user => user.id === id) //find user by socket.id.
+                    const user = getUsers().find(user => user.id === id) //find user by socket.id. //bug if no users in list.
                     usersInRoom.push({id: id, name: user.username, color: user.color})
-
                 }
             }
             const newRoom = {
@@ -126,12 +128,17 @@ function getAllRoomsWithClients() {
                 users: usersInRoom
             }
             availableRooms.push(newRoom)
-
         }
     }
     // console.log(availableRooms)
     // console.log(availableRooms[0])
-    return availableRooms
+    if(availableRooms.length > 0){
+        roomList = availableRooms //not used only backup
+        return availableRooms
+    } else {
+        roomList = availableRooms //not used only backup
+        return false
+    }
 }
 
 http.listen(port, () => {
