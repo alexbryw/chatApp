@@ -170,7 +170,7 @@ function changeRoom(newRoomInfo){
     
     //change room. enter username and new room name.
     //(username is maybe not be needed, server is using socket.id).
-    socket.emit("change room", { username: nameOfUser , room: newRoomInfo.roomName})
+    socket.emit("change room", { username: nameOfUser , room: newRoomInfo.roomName, password: newRoomInfo.password})
 }
 
 socket.on('writing', (writes) => {
@@ -187,9 +187,12 @@ function newRoom(event){
     const inputNewRoomEl = document.getElementById('newRoomNameIn')
     const inputNewRoomPassword = document.getElementById('newRoomPasswordIn')
     console.log(inputNewRoomEl.value)
+    console.log(inputNewRoomPassword.value)
+    console.log("new room name and password")
     if(inputNewRoomEl.value){
-        const newRoomInfo = {roomName: inputNewRoomEl.value, password: ""}
-        changeRoom(newRoomInfo)
+        const newRoomInfo = {roomName: inputNewRoomEl.value, password: inputNewRoomPassword.value}
+        // changeRoom(newRoomInfo)
+        socket.emit("new room", { username: nameOfUser , room: newRoomInfo.roomName, password: newRoomInfo.password})
     } else{
         console.log("Enter new room name")
     }
