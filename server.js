@@ -192,7 +192,7 @@ function getAllRoomsWithClients() {
             availableRooms.push(newRoom)
         }
     }
-    console.log(availableRooms)
+    // console.log(availableRooms)
     // console.log(availableRooms[0])
     if(availableRooms.length > 0){
         roomList = availableRooms //not used only backup
@@ -213,7 +213,7 @@ function removeEmptyRoomsFromPasswordList(availableRooms){
     
     if(!newPasswordList.find( ({ roomName }) => roomName === "main") ){// stop people from adding password to default 'main' room.
         newPasswordList.push({roomName: "main", password: ""})
-        console.log("adding back main to pwd list")
+        // console.log("adding back main to pwd list")
     }
 
     roomPasswordList = newPasswordList // update password list without empty rooms.
