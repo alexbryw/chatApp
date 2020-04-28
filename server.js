@@ -45,20 +45,16 @@ io.on('connection', (socket) => {
     socket.on('change room', ({username, room}) => {
         console.log(username, room)
         const user = getCurrentUser(socket.id)
-
-        //block users from going to the same room their in 
-        if(user.room !== room){
-            if(user){
-                io.to(user.room).emit('message', {color: 'green', message: `${user.username} has left the chat`})
-                socket.leaveAll()// User leaves all rooms.
-                user.room = room
-                socket.join(user.room) //User joins new room.
-                socket.broadcast.to(user.room).emit('message', {color: 'green', message: `${username} has joined the chat`})
-                
-                //Send updated room/user list to all clients on roomList.
-                // io.emit('roomList',{userList: getUsers()})
-                io.emit('newRoomList', getAllRoomsWithClients())
-            }
+        if(user){
+            io.to(user.room).emit('message', {color: 'green', message: `${user.username} has left the chat`})
+            socket.leaveAll()// User leaves all rooms.
+            user.room = room
+            socket.join(user.room) //User joins new room.
+            socket.broadcast.to(user.room).emit('message', {color: 'green', message: `${username} has joined the chat`})
+            
+            //Send updated room/user list to all clients on roomList.
+            // io.emit('roomList',{userList: getUsers()})
+            io.emit('newRoomList', getAllRoomsWithClients())
         }
         // getAllRoomsWithClients() //test
 
