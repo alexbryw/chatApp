@@ -57,31 +57,31 @@ io.on('connection', (socket) => {
                     if(pwdRoom.password === password){
                         console.log("Password is correct , joining room: ")
 
-                        // io.to(user.room).emit('message', {color: 'green', message: `${user.username} has left the chat`})
+                        io.to(user.room).emit('message', {color: 'green', message: `${user.username} has left the chat`})
                         socket.leaveAll()// User leaves all rooms.
                         user.room = room
                         socket.join(user.room) //User joins new room.
-                        // socket.broadcast.to(user.room).emit('message', {color: 'green', message: `${username} has joined the chat`})
+                        socket.broadcast.to(user.room).emit('message', {color: 'green', message: `${username} has joined the chat`})
                     } else {
                         console.log("Wrong Password try again.")
                     }
                 } else {
                     console.log("password not found, join room")
                     
-                    // io.to(user.room).emit('message', {color: 'green', message: `${user.username} has left the chat`})
+                    io.to(user.room).emit('message', {color: 'green', message: `${user.username} has left the chat`})
                     socket.leaveAll()// User leaves all rooms.
                     user.room = room
                     socket.join(user.room) //User joins new room.
-                    // socket.broadcast.to(user.room).emit('message', {color: 'green', message: `${username} has joined the chat`})
+                    socket.broadcast.to(user.room).emit('message', {color: 'green', message: `${username} has joined the chat`})
                 }
             } else {
                 console.log("pwd room not found join without password.")
                 
-                // io.to(user.room).emit('message', {color: 'green', message: `${user.username} has left the chat`})
+                io.to(user.room).emit('message', {color: 'green', message: `${user.username} has left the chat`})
                 socket.leaveAll()// User leaves all rooms.
                 user.room = room
                 socket.join(user.room) //User joins new room.
-                // socket.broadcast.to(user.room).emit('message', {color: 'green', message: `${username} has joined the chat`})
+                socket.broadcast.to(user.room).emit('message', {color: 'green', message: `${username} has joined the chat`})
             }
 
             // io.to(user.room).emit('message', {color: 'green', message: `${user.username} has left the chat`})
