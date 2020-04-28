@@ -196,6 +196,8 @@ function onGoToNewRoom(event){
         const newRoomInfo = {roomName: inputNewRoomEl.value, password: inputNewRoomPassword.value}
         // changeRoom(newRoomInfo)
         socket.emit("new room", { username: nameOfUser , room: newRoomInfo.roomName, password: newRoomInfo.password})
+        let messageContainer = document.querySelector('.chatMessages')
+        messageContainer.innerHTML = ''
     } else{
         console.log("Enter new room name")
     }
