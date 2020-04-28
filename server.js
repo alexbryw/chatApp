@@ -65,7 +65,7 @@ io.on('connection', (socket) => {
 
     socket.on('new room', ({username, room, password}) => {
         if(room){
-            const roomFound = getAllRoomsWithClients().find(({ roomName }) => roomName === room)
+            const roomFound = roomPasswordList.find(({ roomName }) => roomName === room)
             // console.log(getAllRoomsWithClients())
             console.log(roomFound)
             if(roomFound){
@@ -81,7 +81,6 @@ io.on('connection', (socket) => {
 
             }
             console.log(roomPasswordList)
-            //TODO remove empty rooms from password list.
             //TODO add password check in changeRoom
         }
     })
@@ -166,11 +165,21 @@ function getAllRoomsWithClients() {
     // console.log(availableRooms[0])
     if(availableRooms.length > 0){
         roomList = availableRooms //not used only backup
+        removeEmptyRoomsFromPasswordList(availableRooms)
         return availableRooms
     } else {
         roomList = availableRooms //not used only backup
         return false
     }
+}
+
+function removeEmptyRoomsFromPasswordList(availableRooms){
+    console.log(roomPasswordList)
+    console.log("list before")
+    const newPasswordList = roomPasswordList.filter(pwdRoom => availableRooms.find(({ roomName }) => roomName === pwdRoom.roomName ))//works
+    roomPasswordList = newPasswordList // update password list without empty rooms.
+    console.log(newPasswordList)
+    console.log("list after filter")
 }
 
 http.listen(port, () => {
