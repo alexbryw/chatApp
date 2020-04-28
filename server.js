@@ -38,7 +38,7 @@ io.on('connection', (socket) => {
         // getAllRoomsWithClients() //test
         // console.log("userName: " + username)
 
-        socket.emit('message', {color: 'green', message: `Welcome ${username}`})
+        socket.emit('message', {color: 'green', message: `Hello ${username}! Welcome to the ${user.room} room `})
 
         socket.broadcast.to(user.room).emit('message', {color: 'green', message: `${username} has joined the chat`})
     })
@@ -57,10 +57,11 @@ io.on('connection', (socket) => {
                         if(pwdRoom.password === password){
                             console.log("Password is correct , joining room: ")
     
-                            io.to(user.room).emit('message', {color: 'green', message: `${user.username} has left the chat`})
+                            socket.broadcast.to(user.room).emit('message', {color: 'green', message: `${username} has left the chat`})
                             socket.leaveAll()// User leaves all rooms.
                             user.room = room
                             socket.join(user.room) //User joins new room.
+                            socket.emit('message', {color: 'green', message: `${username}, you have now entered the ${user.room}`})
                             socket.broadcast.to(user.room).emit('message', {color: 'green', message: `${username} has joined the chat`})
                         } else {
                             console.log("Wrong Password try again.")
@@ -68,16 +69,17 @@ io.on('connection', (socket) => {
                     } else {
                         console.log("password not found, join room")
                         
-                        io.to(user.room).emit('message', {color: 'green', message: `${user.username} has left the chat`})
+                        socket.broadcast.to(user.room).emit('message', {color: 'green', message: `${username} has left the chat`})
                         socket.leaveAll()// User leaves all rooms.
                         user.room = room
                         socket.join(user.room) //User joins new room.
+                        socket.emit('message', {color: 'green', message: `${username}, you have now entered the ${user.room}`})
                         socket.broadcast.to(user.room).emit('message', {color: 'green', message: `${username} has joined the chat`})
                     }
                 } else {
                     console.log("pwd room not found join without password.")
                     
-                    io.to(user.room).emit('message', {color: 'green', message: `${user.username} has left the chat`})
+                    socket.broadcast.to(user.room).emit('message', {color: 'green', message: `${username} has left the chat`})
                     socket.leaveAll()// User leaves all rooms.
                     user.room = room
                     socket.join(user.room) //User joins new room.
@@ -108,13 +110,18 @@ io.on('connection', (socket) => {
                 console.log("room already exists will not add new room or password")
                 //extra TODO send error: cant add room that already exists
             } else {
+                const user = getCurrentUser(socket.id) //use old users , can use roomList also.
                 console.log("room not found, will add new room and maybe password")
                 const newRoom = {roomName: room, password: password}
                 roomPasswordList.push(newRoom)
+                
+                socket.broadcast.to(user.room).emit('message', {color: 'green', message: `${username} has left the chat`})
                 socket.leaveAll()
                 socket.join(room)
-                const user = getCurrentUser(socket.id) //use old users , can use roomList also.
+                
                 user.room = room    //Need to set to transmit messages to new room.
+                
+                socket.emit('message', {color: 'green', message: `${username}, you have now entered the ${user.room} room`})             
                 io.emit('newRoomList', getAllRoomsWithClients())
 
             }
