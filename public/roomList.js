@@ -42,8 +42,11 @@ function listAllRooms(){
         let li = document.createElement("li")
         li.innerHTML = publicRoomArray[i].roomName
         li.setAttribute("onClick", `selectPublicRoom(${ data })`)
+        li.setAttribute("class", "tooltip")
         publicRoomList.appendChild(li)
         
+        let tooltipDiv = document.createElement('div')
+        tooltipDiv.setAttribute("class", "tooltiptext")
         let nameUl = document.createElement('ul')
         for (const user of publicRoomArray[i].users) { //loop out all users in room.
             console.log(user.name + " " + publicRoomArray[i].roomName)
@@ -51,7 +54,8 @@ function listAllRooms(){
             nameLi.innerHTML = user.name
             nameUl.appendChild(nameLi)
         }
-        publicRoomList.appendChild(nameUl)
+        tooltipDiv.appendChild(nameUl)
+        publicRoomList.appendChild(tooltipDiv)
     }
 
     for(let i = 0; i < privateRoomArray.length; i++){

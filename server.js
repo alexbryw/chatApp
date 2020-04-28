@@ -18,7 +18,6 @@ io.on('connection', (socket) => {
     socket.join('main')
 
     socket.on('get userlist', (checkRequest) => {
-        getUsers()
         socket.emit('post userlist', getUsers())
     })
 
@@ -76,7 +75,6 @@ io.on('connection', (socket) => {
     socket.on('someone writes', (writing) => {
         const user = getCurrentUser(socket.id)
         socket.broadcast.to(user.room).emit('writing', `${user.username} writes...`)
-
     })
 
     //runs when clientdisconnect
