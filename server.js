@@ -16,7 +16,7 @@ app.use(express.static('public'))
 io.on('connection', (socket) => {
     console.log('User connected')
     socket.leaveAll()
-    socket.join('main')
+    // socket.join('main') //Can bug on old open tabs.
 
     socket.on('get userlist', (checkRequest) => {
         getUsers()
@@ -113,6 +113,8 @@ io.on('connection', (socket) => {
                 roomPasswordList.push(newRoom)
                 socket.leaveAll()
                 socket.join(room)
+                const user = getCurrentUser(socket.id) //use old users , can use roomList also.
+                user.room = room    //Need to set to transmit messages to new room.
                 io.emit('newRoomList', getAllRoomsWithClients())
 
             }
@@ -211,7 +213,7 @@ function removeEmptyRoomsFromPasswordList(availableRooms){
     
     if(!newPasswordList.find( ({ roomName }) => roomName === "main") ){// stop people from adding password to default 'main' room.
         newPasswordList.push({roomName: "main", password: ""})
-        console.log("adding back main to pwd list")
+        // console.log("adding back main to pwd list")
     }
 
     roomPasswordList = newPasswordList // update password list without empty rooms.
