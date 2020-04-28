@@ -25,50 +25,58 @@ function init(){
     listAllRooms()
 }
 
-//New user/room list sent here on every change in list.
-socket.on('roomList', (data) => {
-    rooms = [] //Empty rooms array and fill with roomList from server.
-    if(data.userList === false){
-        const newRoom = {roomName: "main", password: ""}
-        rooms.push(newRoom)
-    } else {
-        for (const user of data.userList) {
-            const newRoom = {roomName: user.room, password: ""}
-            rooms.push(newRoom)
-
-        }
-        listAllRooms() //Update ul list when rooms has been updated.
-    }
-
-    //TODO sort list to remove duplicate room names.
+socket.on('newRoomList', (inRoomList) => {
+    console.log("from newRoomList")
+    console.log(inRoomList)
+    rooms = inRoomList
+    listAllRooms()
 
 })
 
-function sortUserList(data){
-    const sortedRoomList = []
-    for (const user of data.userList) {
-        setCurrentRoom(user) //see if user has changed room and update currentRoom.
-        const room = sortedRoomList.find(room => room.roomName === user.room)
-        console.log(room)
-        if(room){
-            console.log("room found, will add user to room")
-            const newUsersInRoom = room.usersInRoom
-            newUsersInRoom.push(user.username)
-            room.usersInRoom = newUsersInRoom
-        } else {
-            console.log("room not found will add new room and user")
-            const usersInRoom = [user.username]
-            const room = user.room
-            const newRoom = {roomName: room, usersInRoom: usersInRoom, password: ""}
-            sortedRoomList.push(newRoom)
-        }
-        console.log("from Sorted room list")
-        console.log(sortedRoomList)
-    }
-    listOfSortedRooms = [...sortedRoomList] //backup, save sorted list.
-    return sortedRoomList
+//New user/room list sent here on every change in list.
+// socket.on('roomList', (data) => {
+//     rooms = [] //Empty rooms array and fill with roomList from server.
+//     if(data.userList === false){
+//         const newRoom = {roomName: "main", password: ""}
+//         rooms.push(newRoom)
+//     } else {
+//         for (const user of data.userList) {
+//             const newRoom = {roomName: user.room, password: ""}
+//             rooms.push(newRoom)
 
-}
+//         }
+//         listAllRooms() //Update ul list when rooms has been updated.
+//     }
+
+//     //TODO sort list to remove duplicate room names.
+
+// })
+
+// function sortUserList(data){
+//     const sortedRoomList = []
+//     for (const user of data.userList) {
+//         setCurrentRoom(user) //see if user has changed room and update currentRoom.
+//         const room = sortedRoomList.find(room => room.roomName === user.room)
+//         console.log(room)
+//         if(room){
+//             console.log("room found, will add user to room")
+//             const newUsersInRoom = room.usersInRoom
+//             newUsersInRoom.push(user.username)
+//             room.usersInRoom = newUsersInRoom
+//         } else {
+//             console.log("room not found will add new room and user")
+//             const usersInRoom = [user.username]
+//             const room = user.room
+//             const newRoom = {roomName: room, usersInRoom: usersInRoom, password: ""}
+//             sortedRoomList.push(newRoom)
+//         }
+//         console.log("from Sorted room list")
+//         console.log(sortedRoomList)
+//     }
+//     listOfSortedRooms = [...sortedRoomList] //backup, save sorted list.
+//     return sortedRoomList
+
+// }
 
 //could use socket.id if multiple users have the same name.
 function setCurrentRoom(user){
@@ -89,7 +97,7 @@ socket.on('message', (message) => {
 
     const listItem = document.createElement('li')
     listItem.setAttribute('class', `${message.color}Text`)
-    listItem.innerText = message.message
+    listItem.innerHTML = message.message
 
     list.appendChild(listItem)
 } )
@@ -135,12 +143,9 @@ function onJoinRoom(data){
 }
 
 function onSendMessage(event) {
-    event.preventDefault()
-    console.log('I am clicked!')
-    
+    event.preventDefault()    
     const input = document.querySelector('.messageInput input')
-    socket.emit('message', input.value)
-    input.value = ""
+    checkForDashes(input.value)
 }
 
 function detectWriting() {
