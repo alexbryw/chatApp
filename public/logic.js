@@ -92,17 +92,6 @@ function setCurrentRoom(user){
     }
 }
 
-socket.on('message', (message) => {
-    const list = document.querySelector('.chatMessages')
-
-    const listItem = document.createElement('li')
-    listItem.setAttribute('class', `${message.color}Text`)
-    listItem.innerHTML = message.message
-
-    list.appendChild(listItem)
-    list.scrollTop = list.scrollHeight
-} )
-
 
 function getUserList(event){
     event.preventDefault()
