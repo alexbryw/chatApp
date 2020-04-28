@@ -20,7 +20,7 @@ function init(){
     const messageFormInput = document.querySelector('.messageInput input')
     messageFormInput.addEventListener('input', detectWriting)
     const newRoomForm = document.querySelector('.newRoomForm button')
-    newRoomForm.addEventListener('click', newRoom)
+    newRoomForm.addEventListener('click', onGoToNewRoom)
 
     listAllRooms()
 }
@@ -154,6 +154,8 @@ function detectWriting() {
 } */
 
 function changeRoom(newRoomInfo){
+    let messageContainer = document.querySelector('.chatMessages')
+    messageContainer.innerHTML = ''
     // event.preventDefault()
     // const roomInputEl = document.querySelector('.changeRoomForm input')
     // const roomName = roomInputEl.value
@@ -172,7 +174,7 @@ setInterval(function(){
     document.querySelector('.someoneIsTyping').innerHTML = ""
  }, 2000);
 
-function newRoom(event){
+function onGoToNewRoom(event){
     event.preventDefault()
     const inputNewRoomEl = document.getElementById('newRoomNameIn')
     const inputNewRoomPassword = document.getElementById('newRoomPasswordIn')
@@ -183,6 +185,8 @@ function newRoom(event){
         const newRoomInfo = {roomName: inputNewRoomEl.value, password: inputNewRoomPassword.value}
         // changeRoom(newRoomInfo)
         socket.emit("new room", { username: nameOfUser , room: newRoomInfo.roomName, password: newRoomInfo.password})
+        let messageContainer = document.querySelector('.chatMessages')
+        messageContainer.innerHTML = ''
     } else{
         console.log("Enter new room name")
     }
