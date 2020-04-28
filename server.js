@@ -16,7 +16,7 @@ app.use(express.static('public'))
 io.on('connection', (socket) => {
     console.log('User connected')
     socket.leaveAll()
-    socket.join('main')
+    // socket.join('main') //Can bug on old open tabs.
 
     socket.on('get userlist', (checkRequest) => {
         getUsers()
@@ -113,6 +113,8 @@ io.on('connection', (socket) => {
                 roomPasswordList.push(newRoom)
                 socket.leaveAll()
                 socket.join(room)
+                const user = getCurrentUser(socket.id) //use old users , can use roomList also.
+                user.room = room    //Need to set to transmit messages to new room.
                 io.emit('newRoomList', getAllRoomsWithClients())
 
             }
@@ -190,7 +192,7 @@ function getAllRoomsWithClients() {
             availableRooms.push(newRoom)
         }
     }
-    // console.log(availableRooms)
+    console.log(availableRooms)
     // console.log(availableRooms[0])
     if(availableRooms.length > 0){
         roomList = availableRooms //not used only backup
