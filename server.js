@@ -114,7 +114,13 @@ io.on('connection', (socket) => {
             } else {
                 const user = getCurrentUser(socket.id) //use old users , can use roomList also.
                 console.log("room not found, will add new room and maybe password")
-                const newRoom = {roomName: room, password: password}
+                let newRoom
+                if(room !== "main"){
+                    newRoom = {roomName: room, password: password}
+                } else {
+                    newRoom = {roomName: room, password: ""} //To stop people from adding password to default main room.
+                }
+                // const newRoom = {roomName: room, password: password} //remove later.
                 roomPasswordList.push(newRoom)
                 
                 socket.broadcast.to(user.room).emit('message', {color: 'green', message: `${username} has left the chat`})
@@ -220,10 +226,10 @@ function removeEmptyRoomsFromPasswordList(availableRooms){
     //filter all rooms to new array if they exist in available rooms to remove empty rooms from password list.
     const newPasswordList = roomPasswordList.filter(pwdRoom => availableRooms.find(({ roomName }) => roomName === pwdRoom.roomName ))
     
-    if(!newPasswordList.find( ({ roomName }) => roomName === "main") ){// stop people from adding password to default 'main' room.
-        newPasswordList.push({roomName: "main", password: ""})
-        // console.log("adding back main to pwd list")
-    }
+    // if(!newPasswordList.find( ({ roomName }) => roomName === "main") ){// stop people from adding password to default 'main' room.
+    //     newPasswordList.push({roomName: "main", password: ""})
+    //     // console.log("adding back main to pwd list")
+    // }
 
     roomPasswordList = newPasswordList // update password list without empty rooms.
     // console.log(newPasswordList)
