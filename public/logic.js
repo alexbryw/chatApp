@@ -41,6 +41,14 @@ socket.on('onPasswordTry', ( data ) => {
     }
 })
 
+socket.on('onCreateNewRoomTry', ( data ) => {
+    if(data.isRoomCreated){
+        alert("Room is created.") //Alert just for testing when new room is created
+    } else {
+        alert("Room cannot be created. try another room name.") //Room name unavailable try another name.
+    }
+})
+
 //New user/room list sent here on every change in list.
 // socket.on('roomList', (data) => {
 //     rooms = [] //Empty rooms array and fill with roomList from server.
