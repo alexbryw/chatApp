@@ -34,13 +34,12 @@ socket.on('newRoomList', (inRoomList) => {
 })
 
 socket.on('onPasswordTry', ( data ) => {
-    const passwordInput = document.querySelector('#passwordInput')
-    if(data.isPasswordCorrect){
-        alert("Password is correct, you may enter.") //Alert just for testing.
-    } else {
-        passwordInput.style.border = ('2px solid red')
-        passwordInput.placeholder = 'Wrong Password!'
-    }
+    //const passwordInput = document.querySelector('.passwordInput')
+    if(!data.isPasswordCorrect){
+        alert('Wrong Password!') //Alert just for testing.
+        /*         passwordInput.style.border = ('2px solid red')
+        passwordInput.placeholder = 'Wrong Password!' */
+    } 
 })
 
 socket.on('onCreateNewRoomTry', ( data ) => {

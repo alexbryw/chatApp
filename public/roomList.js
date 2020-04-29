@@ -79,13 +79,13 @@ function listAllRooms(){
             event.stopPropagation()
         })
         const passwordInput = document.createElement('input')
-        passwordInput.id = 'passwordInput'
+        passwordInput.setAttribute('class', 'passwordInput')
         passwordInput.type = 'text'
         passwordInput.placeholder = 'enter password'
         
         const passwordButton = document.createElement('button')
         passwordButton.innerText = 'enter room'
-        passwordButton.addEventListener('click', () => checkPassword(passwordInput.value,  enterPasswordDiv))
+        passwordButton.addEventListener('click', () => checkPassword(passwordInput.value, privateRoomArray[i]))
     
         enterPasswordDiv.appendChild(passwordInput)
         enterPasswordDiv.appendChild(passwordButton)
@@ -126,6 +126,7 @@ function selectPublicRoom(room){
 //THIS FUNCTION NOT FUNCTIONAL, NEED CORRECT PASSWORD-VALUE TO COMPARE WITH
 
 function checkPassword(passwordInput, room){
+    console.log(room.roomName)
     const newRoomInfo = {roomName: room.roomName, password: passwordInput}
     changeRoom(newRoomInfo)
     // //Need to compare with right value
