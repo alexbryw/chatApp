@@ -83,7 +83,6 @@ function listAllRooms(){
             enterPasswordDiv.classList.toggle('hidden')        
         })
         
-        console.log(enterPasswordDiv.classList)
         privateRoomList.append(li)
         li.append(enterPasswordDiv)
     }

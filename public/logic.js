@@ -42,10 +42,17 @@ socket.on('onPasswordTry', ( data ) => {
 })
 
 socket.on('onCreateNewRoomTry', ( data ) => {
-    if(data.isRoomCreated){
-        alert("Room is created.") //Alert just for testing when new room is created
-    } else {
-        alert("Room cannot be created. try another room name.") //Room name unavailable try another name.
+    const NewRoomTakenError = document.querySelector('#newRoomNameIn')
+    const newRoomButton = document.querySelector('#newRoomButton')
+
+    if(!data.isRoomCreated){   
+        NewRoomTakenError.style.border = '2px solid red'
+        newRoomButton.innerText = 'Room name taken'
+    }
+    else{
+        NewRoomTakenError.style.border = '1px solid yellowgreen'
+        NewRoomTakenError.value = ''
+        newRoomButton.innerText = 'Create and join'
     }
 })
 
@@ -206,6 +213,6 @@ function onGoToNewRoom(event){
     } else{
         console.log("Enter new room name")
     }
-    inputNewRoomEl.value = ""
+    //inputNewRoomEl.value = ""
     inputNewRoomPassword.value = ""
 }
