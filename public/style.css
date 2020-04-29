@@ -188,6 +188,7 @@ li{
     letter-spacing: 0.1rem;
     cursor: pointer;
 }
+
 .roomList li:hover{
     color:yellow;
 }
@@ -224,6 +225,11 @@ li{
     right: 16.6%;
 }
 
+.hoverRoomName{
+    border-bottom: 1px solid yellowgreen;
+    color: white;
+}
+
 .hoverListText{
     top: 10%;
 }
@@ -233,11 +239,12 @@ li{
 }
 
 .hoverList, .hoverListPrivate{
-    padding: 0.25em 0.75em;
+    padding: 0.25em 1em;
 }
 
 .hoverListText li, .hoverListTextPrivate li{
     padding: 0.25em;
+    letter-spacing: 0.1rem;
 }
 
 .hoverListText ul, .hoverListTextPrivate ul{
