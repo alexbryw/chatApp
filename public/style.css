@@ -183,6 +183,15 @@ li{
     
 }
 
+.roomList li{
+    font-size: 1.5rem;
+    letter-spacing: 0.1rem;
+    cursor: pointer;
+}
+.roomList li:hover{
+    color:yellow;
+}
+
 .publicRoomListContainer, .privateRoomListContainer{
     flex-grow: 1;
     height: 50%;
@@ -192,7 +201,11 @@ li{
     height:80%;
     overflow-y: auto;
     width: 100%;
-} 
+}
+
+.publicRoomList, .privateRoomList{
+    padding: 1rem 2rem;
+}
 
 .privateRoomListContainer ul{
     height:80%;
@@ -201,13 +214,36 @@ li{
     width: 100%;
 }
 
-.roomList li{
-    font-size: 1.5rem;
-    letter-spacing: 0.1rem;
-    cursor: pointer;
+.hoverListText {
+    display: none;
+    background: rgb(51, 51, 51);
+    color: yellowgreen;
+    text-align: center;
+    padding: 5px 0;
+    border: 1px solid yellowgreen;
+    width: 25%;
+    height: 30%;
+    position: absolute;
+    top: 6.65em;
+    right: 16.6%;
+    overflow-y: hidden;
 }
-.roomList li:hover{
-    color:yellow;
+
+.hoverListText li{
+    padding: 0.25em;
+}
+
+.hoverList:hover + .hoverListText {
+    display: block;
+}
+
+.hoverListText:hover {
+    display: block;
+}
+
+.hoverListText li:hover{
+    color: yellowgreen;
+    cursor: default;
 }
 
 .newRoomForm{
@@ -230,6 +266,32 @@ li{
 }
 
 .newRoomForm button:hover{
+    background-color: yellow;
+}
+
+.passwordCheckContainer{
+    display:flex;
+    flex-direction: column;
+    border: 3px solid yellowgreen;
+    border-radius: 0.2rem;
+    margin: 1rem 10%;
+}
+
+.passwordCheckContainer input{
+    width: 100%;
+    padding: 0.5rem 1rem;
+    border: 1px solid yellowgreen;
+}
+
+.passwordCheckContainer button{
+    width: 100%;
+    background-color: yellowgreen;
+    padding: 0.6rem 0;
+    border: none;
+    cursor: pointer;
+}
+
+.passwordCheckContainer button:hover{
     background-color: yellow;
 }
 
@@ -270,38 +332,3 @@ li{
     color: rgb(255, 255, 113)
 }
 
-.hoverListText {
-    display: none;
-    background: rgb(51, 51, 51);
-    color: yellowgreen;
-    text-align: center;
-    padding: 5px 0;
-    border: 1px solid yellowgreen;
-    width: 25%;
-    height: 30%;
-    position: absolute;
-    top: 6.65em;
-    right: 16.6%;
-    overflow-y: hidden;
-}
-
-.hoverListText li{
-    padding: 0.25em;
-}
-
-.hoverList{
-    padding: 0.5em; /*Bajs*/
-}
-
-.hoverList:hover + .hoverListText {
-    display: block;
-}
-
-.hoverListText:hover {
-    display: block;
-}
-
-.hoverListText li:hover{
-    color: yellowgreen;
-    cursor: default;
-}
