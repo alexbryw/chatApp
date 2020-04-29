@@ -24,8 +24,6 @@ function listAllRooms(){
     let publicRoomArray = []
     let privateRoomArray = []
 
-    // console.log(rooms)
-
     // Checks if there is a password then split the code
     for(let i = 0; i < rooms.length; i++){
         if(rooms[i].roomPassword){
@@ -33,26 +31,26 @@ function listAllRooms(){
         } else {
             publicRoomArray.push(rooms[i])
         }
-    }
-    
+    }    
     const publicRoomList = document.querySelector('.publicRoomList')
     const privateRoomList = document.querySelector('.privateRoomList')
     publicRoomList.innerHTML = ""
     privateRoomList.innerHTML = ""
-
     for(let i = 0; i < publicRoomArray.length; i++){
         // data = JSON.stringify(publicRoomArray[i])
         let li = document.createElement("li")
         li.innerHTML = publicRoomArray[i].roomName
         li.addEventListener('click', () => {selectPublicRoom(publicRoomArray[i])})
         li.setAttribute("class", "hoverList")
+        if(currentRoom === publicRoomArray[i].roomName){
+            li.setAttribute("id", "usersCurrentRoom")
+        }
         publicRoomList.appendChild(li)
         
         let hoverListDiv = document.createElement('div')
         hoverListDiv.setAttribute("class", "hoverListText")
         let nameUl = document.createElement('ul')
         for (const user of publicRoomArray[i].users) { //loop out all users in room.
-            console.log(user.name + " " + publicRoomArray[i].roomName)
             let nameLi = document.createElement("li")
             nameLi.innerHTML = user.name
             nameUl.appendChild(nameLi)
@@ -62,11 +60,26 @@ function listAllRooms(){
     }
 
     for(let i = 0; i < privateRoomArray.length; i++){
-        //data = JSON.stringify(privateRoomArray[i])
+        data = JSON.stringify(privateRoomArray[i])
         let li = document.createElement("li")
         li.innerHTML = privateRoomArray[i].roomName
         li.addEventListener('click', (event) => {selectPrivateRoom(privateRoomArray[i], li)})
+        li.setAttribute("class", "hoverListPrivate")
+        if(currentRoom === publicRoomArray[i].roomName){
+            li.setAttribute("id", "usersCurrentRoom")
+        }
         privateRoomList.append(li)
+
+        let hoverListDiv = document.createElement('div')
+        hoverListDiv.setAttribute("class", "hoverListTextPrivate")
+        let nameUl = document.createElement('ul')
+        for (const user of privateRoomArray[i].users) { //loop out all users in room.
+            let nameLi = document.createElement("li")
+            nameLi.innerHTML = user.name
+            nameUl.appendChild(nameLi)
+        }
+        hoverListDiv.appendChild(nameUl)
+        privateRoomList.appendChild(hoverListDiv)
     }
 }
 
@@ -91,7 +104,7 @@ function selectPrivateRoom(room, li){
     })
     const passwordInput = document.createElement('input')
     passwordInput.type = 'text'
-    passwordInput.placeholder = 'enter password'
+    passwordInput.placeholder = 'password'
     
     const passwordButton = document.createElement('button')
     passwordButton.innerText = 'enter room'
