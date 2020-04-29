@@ -162,8 +162,7 @@ function detectWriting() {
 } */
 
 function changeRoom(newRoomInfo){
-    let messageContainer = document.querySelector('.chatMessages')
-    messageContainer.innerHTML = ''
+
     // event.preventDefault()
     // const roomInputEl = document.querySelector('.changeRoomForm input')
     // const roomName = roomInputEl.value
@@ -172,6 +171,13 @@ function changeRoom(newRoomInfo){
     //(username is maybe not be needed, server is using socket.id).
     socket.emit("change room", { username: nameOfUser , room: newRoomInfo.roomName, password: newRoomInfo.password})
 }
+
+
+socket.on('clean up', (cleanup) => {
+        let messageContainer = document.querySelector('.chatMessages')
+        messageContainer.innerHTML = ''
+    
+})
 
 socket.on('writing', (writes) => {
     console.log(writes)
