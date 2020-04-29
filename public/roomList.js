@@ -31,26 +31,32 @@ function listAllRooms(){
         } else {
             publicRoomArray.push(rooms[i])
         }
-    }
-    
+    }    
     const publicRoomList = document.querySelector('.publicRoomList')
     const privateRoomList = document.querySelector('.privateRoomList')
     publicRoomList.innerHTML = ""
     privateRoomList.innerHTML = ""
 
+    /*************** PUBLIC ROOM ********************/
+
     for(let i = 0; i < publicRoomArray.length; i++){
-        data = JSON.stringify(publicRoomArray[i])
+        // data = JSON.stringify(publicRoomArray[i])
         let li = document.createElement("li")
         li.innerHTML = publicRoomArray[i].roomName
-        li.addEventListener('click', () => {selectPublicRoom(data)})
+        li.addEventListener('click', () => {selectPublicRoom(publicRoomArray[i])})
         li.setAttribute("class", "hoverList")
+        if(currentRoom === publicRoomArray[i].roomName){
+            li.setAttribute("id", "usersCurrentRoom")
+        }
         publicRoomList.appendChild(li)
-        
+        roomLi = document.createElement("li")
+        roomLi.innerHTML = publicRoomArray[i].roomName
+        roomLi.setAttribute("class", "hoverRoomName")
         let hoverListDiv = document.createElement('div')
         hoverListDiv.setAttribute("class", "hoverListText")
         let nameUl = document.createElement('ul')
+        nameUl.appendChild(roomLi)
         for (const user of publicRoomArray[i].users) { //loop out all users in room.
-           // console.log(user.name + " " + publicRoomArray[i].roomName)
             let nameLi = document.createElement("li")
             nameLi.innerHTML = user.name
             nameUl.appendChild(nameLi)
@@ -59,10 +65,13 @@ function listAllRooms(){
         publicRoomList.appendChild(hoverListDiv)
     }
 
+    /*************** PRIVATE ROOM ********************/
+
     for(let i = 0; i < privateRoomArray.length; i++){
         
         data = JSON.stringify(privateRoomArray[i])
         let li = document.createElement("li")
+        li.setAttribute("class", "hoverListPrivate")
         li.innerHTML = privateRoomArray[i].roomName
         const enterPasswordDiv = document.createElement('div')
         enterPasswordDiv.classList.add('passwordCheckContainer', 'hidden')
@@ -70,6 +79,7 @@ function listAllRooms(){
             event.stopPropagation()
         })
         const passwordInput = document.createElement('input')
+        passwordInput.id = 'passwordInput'
         passwordInput.type = 'text'
         passwordInput.placeholder = 'enter password'
         
@@ -83,8 +93,28 @@ function listAllRooms(){
             enterPasswordDiv.classList.toggle('hidden')        
         })
         
+        if(currentRoom === privateRoomArray[i].roomName){
+            li.setAttribute("id", "usersCurrentRoom")
+        }
+
         privateRoomList.append(li)
         li.append(enterPasswordDiv)
+
+        roomLi = document.createElement("li")
+        roomLi.innerHTML = privateRoomArray[i].roomName
+        roomLi.setAttribute("class", "hoverRoomName")
+
+        let hoverListDiv = document.createElement('div')
+        hoverListDiv.setAttribute("class", "hoverListTextPrivate")
+        let nameUl = document.createElement('ul')
+        nameUl.appendChild(roomLi)
+        for (const user of privateRoomArray[i].users) { //loop out all users in room.
+            let nameLi = document.createElement("li")
+            nameLi.innerHTML = user.name
+            nameUl.appendChild(nameLi)
+        }
+        hoverListDiv.appendChild(nameUl)
+        privateRoomList.appendChild(hoverListDiv)
     }
 }
 
@@ -96,15 +126,14 @@ function selectPublicRoom(room){
 //THIS FUNCTION NOT FUNCTIONAL, NEED CORRECT PASSWORD-VALUE TO COMPARE WITH
 
 function checkPassword(passwordInput, room){
-
-    //Need to compare with right value
-    if(passwordInput === room.password){
-        const passwordDiv = document.querySelector('.passwordCheckContainer')
-        passwordDiv.classList.add('hidden')
-        changeRoom(room)
-    }
-    else{
-        passwordInput.style.border = ('2px solid red')
-        passwordInput.placeholder = 'Wrong Password!'
-    }
+    const newRoomInfo = {roomName: room.roomName, password: passwordInput}
+    changeRoom(newRoomInfo)
+    // //Need to compare with right value
+    // if(passwordInput === room.password){
+    //     changeRoom(room)
+    // }
+    // else{
+    //     passwordInput.style.border = ('2px solid red')
+    //     passwordInput.placeholder = 'Wrong Password!'
+    // }
 }

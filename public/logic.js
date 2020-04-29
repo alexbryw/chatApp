@@ -21,7 +21,7 @@ function init(){
     messageFormInput.addEventListener('input', detectWriting)
     const newRoomForm = document.querySelector('.newRoomForm button')
     newRoomForm.addEventListener('click', onGoToNewRoom)
-
+    setCurrentRoom("main")
     listAllRooms()
 }
 
@@ -34,10 +34,12 @@ socket.on('newRoomList', (inRoomList) => {
 })
 
 socket.on('onPasswordTry', ( data ) => {
+    const passwordInput = document.querySelector('#passwordInput')
     if(data.isPasswordCorrect){
         alert("Password is correct, you may enter.") //Alert just for testing.
     } else {
-        alert("Password is wrong, try again.")
+        passwordInput.style.border = ('2px solid red')
+        passwordInput.placeholder = 'Wrong Password!'
     }
 })
 
@@ -102,7 +104,8 @@ socket.on('onCreateNewRoomTry', ( data ) => {
 // }
 
 //could use socket.id if multiple users have the same name.
-function setCurrentRoom(user){
+// OSKAR CLAIMED THIS FUNCTION NAME MOAHAHAHAHHAHAHA
+/* function setCurrentRoom(user){
     if(user.username === nameOfUser){
         if(currentRoom !== user.room){
             currentRoom = user.room
@@ -113,13 +116,23 @@ function setCurrentRoom(user){
             chatListEl.append(li)
         }
     }
-}
+}*/
 
 
 function getUserList(event){
     event.preventDefault()
     socket.emit('get userlist', true)
 }
+
+socket.on('set currentRoom', (newRoom) => {
+    setCurrentRoom(newRoom)
+})
+
+function setCurrentRoom(newRoom){
+    currentRoom = newRoom
+}
+
+
 
 socket.on('post userlist', (data) => {
     onJoinRoom(data)
@@ -177,8 +190,6 @@ function detectWriting() {
 } */
 
 function changeRoom(newRoomInfo){
-    let messageContainer = document.querySelector('.chatMessages')
-    messageContainer.innerHTML = ''
     // event.preventDefault()
     // const roomInputEl = document.querySelector('.changeRoomForm input')
     // const roomName = roomInputEl.value
@@ -187,6 +198,13 @@ function changeRoom(newRoomInfo){
     //(username is maybe not be needed, server is using socket.id).
     socket.emit("change room", { username: nameOfUser , room: newRoomInfo.roomName, password: newRoomInfo.password})
 }
+
+
+socket.on('clean up', (cleanup) => {
+        let messageContainer = document.querySelector('.chatMessages')
+        messageContainer.innerHTML = ''
+    
+})
 
 socket.on('writing', (writes) => {
     console.log(writes)

@@ -188,8 +188,14 @@ li{
     letter-spacing: 0.1rem;
     cursor: pointer;
 }
+
 .roomList li:hover{
     color:yellow;
+}
+
+#usersCurrentRoom{
+    background-color: yellowgreen;
+    color: black;
 }
 
 .publicRoomListContainer, .privateRoomListContainer{
@@ -203,10 +209,6 @@ li{
     width: 100%;
 }
 
-.publicRoomList, .privateRoomList{
-    padding: 1rem 2rem;
-}
-
 .privateRoomListContainer ul{
     height:80%;
     overflow-y: auto;
@@ -214,7 +216,7 @@ li{
     width: 100%;
 }
 
-.hoverListText {
+.hoverListText, .hoverListTextPrivate {
     display: none;
     background: rgb(51, 51, 51);
     color: yellowgreen;
@@ -224,24 +226,45 @@ li{
     width: 25%;
     height: 30%;
     position: absolute;
-    top: 6.65em;
-    right: 16.6%;
     overflow-y: hidden;
+    right: 16.6%;
 }
 
-.hoverListText li{
+.hoverRoomName{
+    border-bottom: 1px solid yellowgreen;
+    color: white;
+}
+
+.hoverListText{
+    top: 10%;
+}
+
+.hoverListTextPrivate {
+    top: 50%;
+}
+
+.hoverList, .hoverListPrivate{
+    padding: 0.25em 1em;
+}
+
+.hoverListText li, .hoverListTextPrivate li{
     padding: 0.25em;
+    letter-spacing: 0.1rem;
 }
 
-.hoverList:hover + .hoverListText {
+.hoverListText ul, .hoverListTextPrivate ul{
+    height: 100%;
+}
+
+.hoverList:hover + .hoverListText, .hoverListPrivate:hover + .hoverListTextPrivate{
     display: block;
 }
 
-.hoverListText:hover {
+.hoverListText:hover, .hoverListTextPrivate:hover{
     display: block;
 }
 
-.hoverListText li:hover{
+.hoverListTextPrivate li:hover,.hoverListText li:hover{
     color: yellowgreen;
     cursor: default;
 }
@@ -304,6 +327,7 @@ h3{
 .passwordCheckContainer button:hover{
     background-color: yellow;
 }
+
 
 .hidden{
     display: none
