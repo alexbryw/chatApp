@@ -33,6 +33,14 @@ socket.on('newRoomList', (inRoomList) => {
 
 })
 
+socket.on('onPasswordTry', ( data ) => {
+    if(data.isPasswordCorrect){
+        alert("Password is correct, you may enter.") //Alert just for testing.
+    } else {
+        alert("Password is wrong, try again.")
+    }
+})
+
 //New user/room list sent here on every change in list.
 // socket.on('roomList', (data) => {
 //     rooms = [] //Empty rooms array and fill with roomList from server.

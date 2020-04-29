@@ -61,10 +61,12 @@ io.on('connection', (socket) => {
                             socket.leaveAll()// User leaves all rooms.
                             user.room = room
                             socket.join(user.room) //User joins new room.
+                            socket.emit('onPasswordTry', {isPasswordCorrect: true}) //Send message password is correct.
                             socket.emit('message', {color: 'green', message: `${username}, you have now entered the ${user.room}`})
                             socket.broadcast.to(user.room).emit('message', {color: 'green', message: `${username} has joined the chat`})
                         } else {
                             console.log("Wrong Password try again.")
+                            socket.emit('onPasswordTry', {isPasswordCorrect: false}) //Send message password is wrong.
                         }
                     } else {
                         console.log("password not found, join room")
