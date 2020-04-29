@@ -15,31 +15,20 @@ app.use(express.static('public'))
 
 io.on('connection', (socket) => {
     console.log('User connected')
-    socket.leaveAll()
-    // socket.join('main') //Can bug on old open tabs.
+    socket.leaveAll() //All new users leave all current rooms on first connection.
 
-    socket.on('get userlist', (checkRequest) => {
-        getUsers()
+    //List of users to see if user name is available.
+    socket.on('get userlist', (checkRequest) => { 
         socket.emit('post userlist', getUsers())
     })
 
+    //First login you join the main room.
     socket.on('join room', ({username, color, room}) => {
-        // console.log("from join room")
-        // getAllRoomsWithClients() //test
-        const user = userJoin(socket.id, username, color, room)
-        
-        //Send userList to all users when new user joins.
-        // io.emit('roomList',{userList: getUsers()})
-        // console.log(getUsers())
-        socket.leaveAll()// User leaves all rooms. //test
+        const user = userJoin(socket.id, username, color, room) //Add new user to utils/users.
+        socket.leaveAll()// User leaves all current rooms before joining a new room.
         socket.join(user.room)
         io.emit('newRoomList', getAllRoomsWithClients())
-        // console.log(io.sockets.adapter.rooms)
-        // getAllRoomsWithClients() //test
-        // console.log("userName: " + username)
-
         socket.emit('message', {color: 'green', message: `Hello ${username}! Welcome to the ${user.room} room `})
-
         socket.broadcast.to(user.room).emit('message', {color: 'green', message: `${username} has joined the chat`})
     })
 
@@ -88,17 +77,8 @@ io.on('connection', (socket) => {
                     socket.broadcast.to(user.room).emit('message', {color: 'green', message: `${username} has joined the chat`})
                 }
     
-                // io.to(user.room).emit('message', {color: 'green', message: `${user.username} has left the chat`})
-                // socket.leaveAll()// User leaves all rooms.
-                // user.room = room
-                // socket.join(user.room) //User joins new room.
-                // socket.broadcast.to(user.room).emit('message', {color: 'green', message: `${username} has joined the chat`})
-                
-                //Send updated room/user list to all clients on roomList.
-                // io.emit('roomList',{userList: getUsers()})
                 io.emit('newRoomList', getAllRoomsWithClients())
             }
-            // getAllRoomsWithClients() //test
         }
 
     })
@@ -106,43 +86,39 @@ io.on('connection', (socket) => {
     socket.on('new room', ({username, room, password}) => {
         if(room){
             const roomFound = roomPasswordList.find(({ roomName }) => roomName === room)
-            // console.log(getAllRoomsWithClients())
-            // console.log(roomFound)
             if(roomFound){
                 console.log("room already exists will not add new room or password")
                 //extra TODO send error: cant add room that already exists
             } else {
                 const user = getCurrentUser(socket.id) //use old users , can use roomList also.
                 console.log("room not found, will add new room and maybe password")
+                
+                //Add new room to roomPasswordList array.
                 let newRoom
                 if(room !== "main"){
                     newRoom = {roomName: room, password: password}
                 } else {
                     newRoom = {roomName: room, password: ""} //To stop people from adding password to default main room.
                 }
-                // const newRoom = {roomName: room, password: password} //remove later.
                 roomPasswordList.push(newRoom)
                 
+                //Join the new room that was created.
                 socket.broadcast.to(user.room).emit('message', {color: 'green', message: `${username} has left the chat`})
                 socket.leaveAll()
                 socket.join(room)
                 
-                user.room = room    //Need to set to transmit messages to new room.
+                user.room = room //Need to set to transmit messages to new room.
                 
                 socket.emit('message', {color: 'green', message: `${username}, you have now entered the ${user.room} room`})             
                 io.emit('newRoomList', getAllRoomsWithClients())
 
             }
             console.log(roomPasswordList)
-            //TODO add password check in changeRoom
+
         }
     })
-/* 
-    socket.on('message', (message) => {
-        io.emit('message', message)
-    }) */
 
-    //Listen for chat-message
+    //Send message to users room only.
     socket.on('message', (message) => {
         const user = getCurrentUser(socket.id)
 
@@ -155,7 +131,7 @@ io.on('connection', (socket) => {
 
     })
 
-    //runs when clientdisconnect
+    //Runs when client disconnects.
     socket.on('disconnect', () => {
         //Check which user that leaves
         const user = removeUserOnLeave(socket.id)
@@ -163,30 +139,21 @@ io.on('connection', (socket) => {
         if(user){
             io.to(user.room).emit('message', {color: 'green', message: `${user.username} has left the chat`})
             //Update all connected clients of the new user/room list.
-            // io.emit('roomList',{userList: getUsers()})
             io.emit('newRoomList', getAllRoomsWithClients())
         }
-        
         console.log("someone disconnected.")
     })
-
-    //Send userList to all on connect.
-    // io.emit('roomList',{userList: getUsers()})
-    // io.emit('newRoomList', {roomList: getAllRoomsWithClients()})
 })
 
 function getAllRoomsWithClients() {
     const availableRooms = []
-    // console.log(Object.keys(io.sockets.adapter.rooms))
-    const rooms = io.sockets.adapter.rooms  // All rooms with users socket.id
+    // console.log(Object.keys(io.sockets.adapter.rooms)) //Use Object.keys for dictionary key/value pair.
+    const rooms = io.sockets.adapter.rooms  //Dictionary of all rooms with users socket.id
     if (rooms) {
-        // console.log(rooms)
         for (const room in rooms) {
-            // console.log(rooms[room].sockets)
             const usersInRoom = []
             for (const id in rooms[room].sockets) {
                 if (rooms[room].sockets.hasOwnProperty(id)) {
-                    // console.log(id)
                     const user = getUsers().find(user => user.id === id) //find user by socket.id. //bug if no users in list.
                     usersInRoom.push({id: id, name: user.username, color: user.color})
                 }
@@ -207,8 +174,7 @@ function getAllRoomsWithClients() {
             availableRooms.push(newRoom)
         }
     }
-    // console.log(availableRooms)
-    // console.log(availableRooms[0])
+
     if(availableRooms.length > 0){
         roomList = availableRooms //not used only backup
         removeEmptyRoomsFromPasswordList(availableRooms)
@@ -220,20 +186,10 @@ function getAllRoomsWithClients() {
 }
 
 function removeEmptyRoomsFromPasswordList(availableRooms){
-    // console.log(roomPasswordList)
-    // console.log("list before")
 
     //filter all rooms to new array if they exist in available rooms to remove empty rooms from password list.
     const newPasswordList = roomPasswordList.filter(pwdRoom => availableRooms.find(({ roomName }) => roomName === pwdRoom.roomName ))
-    
-    // if(!newPasswordList.find( ({ roomName }) => roomName === "main") ){// stop people from adding password to default 'main' room.
-    //     newPasswordList.push({roomName: "main", password: ""})
-    //     // console.log("adding back main to pwd list")
-    // }
-
     roomPasswordList = newPasswordList // update password list without empty rooms.
-    // console.log(newPasswordList)
-    // console.log("list after filter")
 }
 
 http.listen(port, () => {
