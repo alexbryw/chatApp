@@ -45,10 +45,11 @@ socket.on('onPasswordTry', ( data ) => {
 socket.on('onCreateNewRoomTry', ( data ) => {
     const NewRoomTakenError = document.querySelector('#newRoomNameIn')
     const newRoomButton = document.querySelector('#newRoomButton')
-
     if(!data.isRoomCreated){   
         NewRoomTakenError.style.border = '2px solid red'
         newRoomButton.innerText = 'Room name taken'
+        //newRoomButton.style.background = 'red'
+        //newRoomButton.style.color = 'red'
     }
     else{
         NewRoomTakenError.style.border = '1px solid yellowgreen'
