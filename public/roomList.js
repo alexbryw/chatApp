@@ -20,6 +20,8 @@ let rooms = [
     // }
 ]
 
+let isShowing = false
+
 function listAllRooms(){
     let publicRoomArray = []
     let privateRoomArray = []
@@ -62,11 +64,16 @@ function listAllRooms(){
     }
 
     for(let i = 0; i < privateRoomArray.length; i++){
-        //data = JSON.stringify(privateRoomArray[i])
+        
+        data = JSON.stringify(privateRoomArray[i])
         let li = document.createElement("li")
         li.innerHTML = privateRoomArray[i].roomName
-        li.addEventListener('click', (event) => {selectPrivateRoom(data, li)})
+        const enterPasswordDiv = document.createElement('div') 
+        
+        console.log(data)
+        li.addEventListener('click', () => {selectPrivateRoom(data, enterPasswordDiv)})
         privateRoomList.append(li)
+        li.append(enterPasswordDiv)
     }
 }
 
@@ -78,27 +85,39 @@ function selectPublicRoom(room){
     changeRoom(room)
 }
 
-function selectPrivateRoom(room, li){
+function selectPrivateRoom(room, enterPasswordDiv){
     
+    
+    console.log(isShowing)
+    
+    if(!isShowing){   
+        
+        enterPasswordDiv.setAttribute('class', 'passwordCheckContainer')
+        enterPasswordDiv.addEventListener('click', (event) => {
+            event.stopPropagation()
+        })
+        const passwordInput = document.createElement('input')
+        passwordInput.type = 'text'
+        passwordInput.placeholder = 'enter password'
+        
+        const passwordButton = document.createElement('button')
+        passwordButton.innerText = 'enter room'
+        passwordButton.addEventListener('click', () => checkPassword(passwordInput.value, room, enterPasswordDiv))
+    
+        enterPasswordDiv.appendChild(passwordInput)
+        enterPasswordDiv.appendChild(passwordButton)
+    
+        isShowing = true
+        console.log(isShowing)
+    }
+    else if(isShowing){
+        enterPasswordDiv.removeAttribute("class")
+        enterPasswordDiv.innerHTML = ''
+        isShowing = false
+    }
     console.log('I am klickad!')
     //var passwordInput = prompt("Please enter your name", "");
-    const enterPasswordDiv = document.createElement('div')
-    enterPasswordDiv.setAttribute('class', 'passwordCheckContainer')
-    enterPasswordDiv.addEventListener('click', (event) => {
-        event.stopPropagation()
-    })
-    const passwordInput = document.createElement('input')
-    passwordInput.type = 'text'
-    passwordInput.placeholder = 'enter password'
-    
-    const passwordButton = document.createElement('button')
-    passwordButton.innerText = 'enter room'
-    passwordButton.addEventListener('click', () => checkPassword(passwordInput.value, room))
 
-    enterPasswordDiv.appendChild(passwordInput)
-    enterPasswordDiv.appendChild(passwordButton)
-
-    li.appendChild(enterPasswordDiv)
 
 /*     if (passwordInput === room.password) {
         console.log(room)
@@ -113,6 +132,8 @@ function checkPassword(passwordInput, room){
 
     //Need to compare with right value
     if(passwordInput === room.password){
+        enterPasswordDiv.removeAttribute("class")
+        enterPasswordDiv.innerHTML = ''
         changeRoom(room)
     }
     else{
