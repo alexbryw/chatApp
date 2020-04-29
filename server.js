@@ -54,7 +54,7 @@ io.on('connection', (socket) => {
                             socket.emit('onPasswordTry', {isPasswordCorrect: true}) //Send message password is correct.
                             socket.emit('set currentRoom', user.room)
                             socket.emit('clean up', true)
-                            socket.emit('message', {color: 'green', message: `${username}, you have now entered the ${user.room}`})
+                            socket.emit('message', {color: 'green', message: `${username}, you have now entered the ${user.room} room`})
                             socket.broadcast.to(user.room).emit('message', {color: 'green', message: `${username} has joined the chat`})
                         } else {
                             console.log("Wrong Password try again.")
@@ -69,7 +69,7 @@ io.on('connection', (socket) => {
                         socket.join(user.room) //User joins new room.
                         socket.emit('clean up', true)
                         socket.emit('set currentRoom', user.room)
-                        socket.emit('message', {color: 'green', message: `${username}, you have now entered the ${user.room}`})
+                        socket.emit('message', {color: 'green', message: `${username}, you have now entered the ${user.room} room`})
                         socket.broadcast.to(user.room).emit('message', {color: 'green', message: `${username} has joined the chat`})
                     }
                 } else {
