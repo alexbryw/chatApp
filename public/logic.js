@@ -43,7 +43,7 @@ socket.on('onPasswordTry', ( data ) => {
 
 socket.on('onCreateNewRoomTry', ( data ) => {
     if(data.isRoomCreated){
-        alert("Room is created.") //Alert just for testing when new room is created
+        // alert("Room is created.") //Alert just for testing when new room is created
     } else {
         alert("Room cannot be created. try another room name.") //Room name unavailable try another name.
     }
@@ -170,6 +170,8 @@ function detectWriting() {
 } */
 
 function changeRoom(newRoomInfo){
+    console.log("from change room")
+    console.log(newRoomInfo.roomName)
     let messageContainer = document.querySelector('.chatMessages')
     messageContainer.innerHTML = ''
     // event.preventDefault()
