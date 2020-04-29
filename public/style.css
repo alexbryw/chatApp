@@ -285,6 +285,8 @@ h3{
     border: 3px solid yellowgreen;
     border-radius: 0.2rem;
     margin: 1rem 0;
+    background-color: blue;
+    padding: 1rem
 }
 
 .passwordCheckContainer input{
@@ -303,6 +305,10 @@ h3{
 
 .passwordCheckContainer button:hover{
     background-color: yellow;
+}
+
+.hidden{
+    display: none
 }
 
 ::-webkit-scrollbar { /*Keeps the scrollbar in the todolist visable*/
