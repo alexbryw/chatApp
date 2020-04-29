@@ -193,6 +193,11 @@ li{
     color:yellow;
 }
 
+#usersCurrentRoom{
+    background-color: yellowgreen;
+    color: black;
+}
+
 .publicRoomListContainer, .privateRoomListContainer{
     flex-grow: 1;
     height: 50%;
@@ -264,6 +269,16 @@ li{
     cursor: default;
 }
 
+h3{
+    font-size: 1.5rem;
+    letter-spacing: 0.2rem;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid black;
+    width:100%;
+    margin: auto;
+    
+}
+
 .newRoomForm{
     display:flex;
     flex-direction: column;
@@ -278,7 +293,7 @@ li{
 
 .newRoomForm button{
     background-color: yellowgreen;
-    padding: 0.6rem 0;
+    padding: 0.8rem 0;
     border: none;
     cursor: pointer;
 }
@@ -292,7 +307,7 @@ li{
     flex-direction: column;
     border: 3px solid yellowgreen;
     border-radius: 0.2rem;
-    margin: 1rem 10%;
+    margin: 1rem 0;
 }
 
 .passwordCheckContainer input{
@@ -304,7 +319,7 @@ li{
 .passwordCheckContainer button{
     width: 100%;
     background-color: yellowgreen;
-    padding: 0.6rem 0;
+    padding: 0.5rem 0;
     border: none;
     cursor: pointer;
 }
@@ -313,9 +328,9 @@ li{
     background-color: yellow;
 }
 
-#usersCurrentRoom{
-    background-color: yellowgreen;
-    color: black;
+
+.hidden{
+    display: none
 }
 
 ::-webkit-scrollbar { /*Keeps the scrollbar in the todolist visable*/

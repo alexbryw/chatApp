@@ -36,6 +36,9 @@ function listAllRooms(){
     const privateRoomList = document.querySelector('.privateRoomList')
     publicRoomList.innerHTML = ""
     privateRoomList.innerHTML = ""
+
+    /*************** PUBLIC ROOM ********************/
+
     for(let i = 0; i < publicRoomArray.length; i++){
         // data = JSON.stringify(publicRoomArray[i])
         let li = document.createElement("li")
@@ -62,16 +65,41 @@ function listAllRooms(){
         publicRoomList.appendChild(hoverListDiv)
     }
 
+    /*************** PRIVATE ROOM ********************/
+
     for(let i = 0; i < privateRoomArray.length; i++){
+        
         data = JSON.stringify(privateRoomArray[i])
         let li = document.createElement("li")
-        li.innerHTML = privateRoomArray[i].roomName
-        li.addEventListener('click', (event) => {selectPrivateRoom(privateRoomArray[i], li)})
         li.setAttribute("class", "hoverListPrivate")
+        li.innerHTML = privateRoomArray[i].roomName
+        const enterPasswordDiv = document.createElement('div')
+        enterPasswordDiv.classList.add('passwordCheckContainer', 'hidden')
+        enterPasswordDiv.addEventListener('click', (event) => {
+            event.stopPropagation()
+        })
+        const passwordInput = document.createElement('input')
+        passwordInput.setAttribute('class', 'passwordInput')
+        passwordInput.type = 'text'
+        passwordInput.placeholder = 'enter password'
+        
+        const passwordButton = document.createElement('button')
+        passwordButton.innerText = 'enter room'
+        passwordButton.addEventListener('click', () => checkPassword(passwordInput.value, privateRoomArray[i]))
+    
+        enterPasswordDiv.appendChild(passwordInput)
+        enterPasswordDiv.appendChild(passwordButton)
+        li.addEventListener('click', () => {
+            enterPasswordDiv.classList.toggle('hidden')        
+        })
+        
         if(currentRoom === privateRoomArray[i].roomName){
             li.setAttribute("id", "usersCurrentRoom")
         }
+
         privateRoomList.append(li)
+        li.append(enterPasswordDiv)
+
         roomLi = document.createElement("li")
         roomLi.innerHTML = privateRoomArray[i].roomName
         roomLi.setAttribute("class", "hoverRoomName")
@@ -91,47 +119,14 @@ function listAllRooms(){
 }
 
 
-
-
 function selectPublicRoom(room){
-    console.log("from public list")
-    console.log(room)
     changeRoom(room)
-}
-
-function selectPrivateRoom(room, li){
-    
-    console.log('from private list')
-    console.log(room)
-    //var passwordInput = prompt("Please enter your name", "");
-    const enterPasswordDiv = document.createElement('div')
-    enterPasswordDiv.setAttribute('class', 'passwordCheckContainer')
-    enterPasswordDiv.addEventListener('click', (event) => {
-        event.stopPropagation()
-    })
-    const passwordInput = document.createElement('input')
-    passwordInput.type = 'text'
-    passwordInput.placeholder = 'password'
-    
-    const passwordButton = document.createElement('button')
-    passwordButton.innerText = 'enter room'
-    passwordButton.addEventListener('click', () => checkPassword(passwordInput.value, room))
-
-    enterPasswordDiv.appendChild(passwordInput)
-    enterPasswordDiv.appendChild(passwordButton)
-
-    li.appendChild(enterPasswordDiv)
-
-/*     if (passwordInput === room.password) {
-        console.log(room)
-    } else {
-        alert("Wrong password")
-    } */
 }
 
 //THIS FUNCTION NOT FUNCTIONAL, NEED CORRECT PASSWORD-VALUE TO COMPARE WITH
 
 function checkPassword(passwordInput, room){
+    console.log(room.roomName)
     const newRoomInfo = {roomName: room.roomName, password: passwordInput}
     changeRoom(newRoomInfo)
     // //Need to compare with right value
