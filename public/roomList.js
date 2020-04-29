@@ -65,7 +65,7 @@ function listAllRooms(){
         li.innerHTML = privateRoomArray[i].roomName
         li.addEventListener('click', (event) => {selectPrivateRoom(privateRoomArray[i], li)})
         li.setAttribute("class", "hoverListPrivate")
-        if(currentRoom === publicRoomArray[i].roomName){
+        if(currentRoom === privateRoomArray[i].roomName){
             li.setAttribute("id", "usersCurrentRoom")
         }
         privateRoomList.append(li)
