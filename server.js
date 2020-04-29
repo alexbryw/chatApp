@@ -89,6 +89,7 @@ io.on('connection', (socket) => {
             if(roomFound){
                 console.log("room already exists will not add new room or password")
                 //extra TODO send error: cant add room that already exists
+                socket.emit('onCreateNewRoomTry', {isRoomCreated: false}) //Send message new room is not created.
             } else {
                 const user = getCurrentUser(socket.id) //use old users , can use roomList also.
                 console.log("room not found, will add new room and maybe password")
@@ -101,6 +102,8 @@ io.on('connection', (socket) => {
                     newRoom = {roomName: room, password: ""} //To stop people from adding password to default main room.
                 }
                 roomPasswordList.push(newRoom)
+
+                socket.emit('onCreateNewRoomTry', {isRoomCreated: true}) //Send message new room is created.
                 
                 //Join the new room that was created.
                 socket.broadcast.to(user.room).emit('message', {color: 'green', message: `${username} has left the chat`})
