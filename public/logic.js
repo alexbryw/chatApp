@@ -21,7 +21,7 @@ function init(){
     messageFormInput.addEventListener('input', detectWriting)
     const newRoomForm = document.querySelector('.newRoomForm button')
     newRoomForm.addEventListener('click', onGoToNewRoom)
-
+    setCurrentRoom("main")
     listAllRooms()
 }
 
@@ -95,7 +95,8 @@ socket.on('onCreateNewRoomTry', ( data ) => {
 // }
 
 //could use socket.id if multiple users have the same name.
-function setCurrentRoom(user){
+// OSKAR CLAIMED THIS FUNCTION NAME MOAHAHAHAHHAHAHA
+/* function setCurrentRoom(user){
     if(user.username === nameOfUser){
         if(currentRoom !== user.room){
             currentRoom = user.room
@@ -106,13 +107,23 @@ function setCurrentRoom(user){
             chatListEl.append(li)
         }
     }
-}
+}*/
 
 
 function getUserList(event){
     event.preventDefault()
     socket.emit('get userlist', true)
 }
+
+socket.on('set currentRoom', (newRoom) => {
+    setCurrentRoom(newRoom)
+})
+
+function setCurrentRoom(newRoom){
+    currentRoom = newRoom
+}
+
+
 
 socket.on('post userlist', (data) => {
     onJoinRoom(data)

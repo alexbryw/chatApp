@@ -28,6 +28,7 @@ io.on('connection', (socket) => {
         socket.leaveAll()// User leaves all current rooms before joining a new room.
         socket.join(user.room)
         io.emit('newRoomList', getAllRoomsWithClients())
+        socket.emit('set currentRoom', user.room)
         socket.emit('message', {color: 'green', message: `Hello ${username}! Welcome to the ${user.room} room `})
         socket.broadcast.to(user.room).emit('message', {color: 'green', message: `${username} has joined the chat`})
     })
@@ -51,6 +52,7 @@ io.on('connection', (socket) => {
                             user.room = room
                             socket.join(user.room) //User joins new room.
                             socket.emit('onPasswordTry', {isPasswordCorrect: true}) //Send message password is correct.
+                            socket.emit('set currentRoom', user.room)
                             socket.emit('clean up', true)
                             socket.emit('message', {color: 'green', message: `${username}, you have now entered the ${user.room}`})
                             socket.broadcast.to(user.room).emit('message', {color: 'green', message: `${username} has joined the chat`})
@@ -66,6 +68,7 @@ io.on('connection', (socket) => {
                         user.room = room
                         socket.join(user.room) //User joins new room.
                         socket.emit('clean up', true)
+                        socket.emit('set currentRoom', user.room)
                         socket.emit('message', {color: 'green', message: `${username}, you have now entered the ${user.room}`})
                         socket.broadcast.to(user.room).emit('message', {color: 'green', message: `${username} has joined the chat`})
                     }
@@ -75,6 +78,7 @@ io.on('connection', (socket) => {
                     socket.broadcast.to(user.room).emit('message', {color: 'green', message: `${username} has left the chat`})
                     socket.leaveAll()// User leaves all rooms.
                     user.room = room
+                    socket.emit('set currentRoom', user.room)
                     socket.join(user.room) //User joins new room.
                     socket.broadcast.to(user.room).emit('message', {color: 'green', message: `${username} has joined the chat`})
                 }
@@ -112,12 +116,12 @@ io.on('connection', (socket) => {
                 socket.join(room)
                 user.room = room    //Need to set to transmit messages to new room.
                 socket.emit('clean up', true)
+                socket.emit('set currentRoom', user.room)
                 socket.emit('message', {color: 'green', message: `${username}, you have now entered the ${user.room} room`})             
                 io.emit('newRoomList', getAllRoomsWithClients())
 
             }
             console.log(roomPasswordList)
-
         }
     })
 
