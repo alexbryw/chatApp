@@ -54,13 +54,12 @@ function PasswordTry(data) {
     const passwordInput = document.querySelectorAll('input.passwordInput')
     const passwordButton = document.querySelectorAll('button.passwordButton')
     
-    console.log(passwordInput)
     if(!data.isPasswordCorrect){
         applyErrorStyleInput(passwordInput)
         applyErrorStyleButton(passwordButton)
-    }
-    
+    } 
 }
+
 function applyErrorStyleInput(passwordInput){
     let index = 0, length = passwordInput.length;
     for ( ; index < length; index++) {
