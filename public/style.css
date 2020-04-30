@@ -329,9 +329,10 @@ h3{
 }
 
 
-.hidden{
+.hiddenPasswordForm{
     display: none
 }
+
 
 ::-webkit-scrollbar { /*Keeps the scrollbar in the todolist visable*/
     -webkit-appearance: none;
@@ -370,3 +371,14 @@ h3{
     color: rgb(255, 255, 113)
 }
 
+@media screen and (max-width: 1400px) {
+    .roomList h2 {
+        font-size: 1.1rem;
+        padding: 1rem 1rem
+    }
+
+    h3{
+        font-size: 1.1rem;
+        padding: 1rem 1rem
+    }
+}

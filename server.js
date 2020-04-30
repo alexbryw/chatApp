@@ -56,6 +56,7 @@ io.on('connection', (socket) => {
                             socket.emit('clean up', true)
                             socket.emit('message', {color: 'green', message: `${username}, you have now entered the ${user.room} room`})
                             socket.broadcast.to(user.room).emit('message', {color: 'green', message: `${username} has joined the chat`})
+                            io.emit('newRoomList', getAllRoomsWithClients())
                         } else {
                             console.log("Wrong Password try again.")
                             socket.emit('onPasswordTry', {isPasswordCorrect: false}) //Send message password is wrong.
@@ -71,6 +72,7 @@ io.on('connection', (socket) => {
                         socket.emit('set currentRoom', user.room)
                         socket.emit('message', {color: 'green', message: `${username}, you have now entered the ${user.room} room`})
                         socket.broadcast.to(user.room).emit('message', {color: 'green', message: `${username} has joined the chat`})
+                        io.emit('newRoomList', getAllRoomsWithClients())
                     }
                 } else {
                     console.log("pwd room not found join without password.")
@@ -81,9 +83,10 @@ io.on('connection', (socket) => {
                     socket.emit('set currentRoom', user.room)
                     socket.join(user.room) //User joins new room.
                     socket.broadcast.to(user.room).emit('message', {color: 'green', message: `${username} has joined the chat`})
+                    io.emit('newRoomList', getAllRoomsWithClients())
                 }
     
-                io.emit('newRoomList', getAllRoomsWithClients())
+                
             }
         }
     })
