@@ -34,9 +34,11 @@ socket.on('newRoomList', (inRoomList) => {
 
 socket.on('onPasswordTry', ( data ) => {
     const passwordInput = document.querySelector('.passwordInput')
+    const passwordButton = document.querySelector('.passwordButton')
+
     if(!data.isPasswordCorrect){
         passwordInput.style.border = ('2px solid red')
-        passwordInput.placeholder = 'Wrong Password!' 
+        passwordButton.innerText = 'Wrong Password!'
     }
 })
 

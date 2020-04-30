@@ -37,10 +37,9 @@ function listAllRooms(){
     publicRoomList.innerHTML = ""
     privateRoomList.innerHTML = ""
 
-    /*************** PUBLIC ROOM ********************/
+    /**************** PUBLIC ROOM ********************/
 
     for(let i = 0; i < publicRoomArray.length; i++){
-        // data = JSON.stringify(publicRoomArray[i])
         let li = document.createElement("li")
         li.innerHTML = publicRoomArray[i].roomName
         li.addEventListener('click', () => {selectPublicRoom(publicRoomArray[i])})
@@ -85,9 +84,10 @@ function listAllRooms(){
         passwordInput.placeholder = 'enter password'
         
         const passwordButton = document.createElement('button')
+
         passwordButton.innerText = 'enter room'
         passwordButton.addEventListener('click', () => checkPassword(passwordInput.value, privateRoomArray[i]))
-    
+        passwordButton.setAttribute('class', 'passwordButton')
         enterPasswordDiv.appendChild(passwordInput)
         enterPasswordDiv.appendChild(passwordButton)
         roomText.addEventListener('click', () => {
