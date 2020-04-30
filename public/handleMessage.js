@@ -49,7 +49,7 @@ function writeMessage(message) {
     const list = document.querySelector('.chatMessages')
     const listItem = document.createElement('li')
     listItem.setAttribute('class', `${message.color}Text`)
-    listItem.innerHTML = newMessage
+    listItem.innerText = newMessage
 
     list.appendChild(listItem)
 }

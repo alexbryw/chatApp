@@ -41,7 +41,7 @@ function listAllRooms(){
 
     for(let i = 0; i < publicRoomArray.length; i++){
         let li = document.createElement("li")
-        li.innerHTML = publicRoomArray[i].roomName
+        li.innerText = publicRoomArray[i].roomName
         li.addEventListener('click', () => {selectPublicRoom(publicRoomArray[i])})
         li.setAttribute("class", "hoverList")
         if(currentRoom === publicRoomArray[i].roomName){
@@ -49,7 +49,7 @@ function listAllRooms(){
         }
         publicRoomList.appendChild(li)
         roomLi = document.createElement("li")
-        roomLi.innerHTML = publicRoomArray[i].roomName
+        roomLi.innerText = publicRoomArray[i].roomName
         roomLi.setAttribute("class", "hoverRoomName")
         let hoverListDiv = document.createElement('div')
         hoverListDiv.setAttribute("class", "hoverListText")
@@ -57,7 +57,7 @@ function listAllRooms(){
         nameUl.appendChild(roomLi)
         for (const user of publicRoomArray[i].users) { //loop out all users in room.
             let nameLi = document.createElement("li")
-            nameLi.innerHTML = user.name
+            nameLi.innerText = user.name
             nameUl.appendChild(nameLi)
         }
         hoverListDiv.appendChild(nameUl)
@@ -72,7 +72,7 @@ function listAllRooms(){
         let li = document.createElement("li")
         li.setAttribute("class", "hoverListPrivate")
         let roomText = document.createElement('p')
-        roomText.innerHTML = privateRoomArray[i].roomName
+        roomText.innerText = privateRoomArray[i].roomName
         const enterPasswordDiv = document.createElement('div')
         enterPasswordDiv.classList.add('passwordCheckContainer', 'hiddenPasswordForm')
         enterPasswordDiv.addEventListener('click', (event) => {
@@ -105,7 +105,7 @@ function listAllRooms(){
         li.append(enterPasswordDiv)
 
         roomLi = document.createElement("li")
-        roomLi.innerHTML = privateRoomArray[i].roomName
+        roomLi.innerText = privateRoomArray[i].roomName
         roomLi.setAttribute("class", "hoverRoomName")
 
         let hoverListDiv = document.createElement('div')
@@ -114,7 +114,7 @@ function listAllRooms(){
         nameUl.appendChild(roomLi)
         for (const user of privateRoomArray[i].users) { //loop out all users in room.
             let nameLi = document.createElement("li")
-            nameLi.innerHTML = user.name
+            nameLi.innerText = user.name
             nameUl.appendChild(nameLi)
         }
         hoverListDiv.appendChild(nameUl)

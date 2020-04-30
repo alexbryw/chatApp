@@ -164,7 +164,7 @@ function onJoinRoom(data){
     }
     
     if(usedName){
-        document.querySelector('.usernameTaken').innerHTML = "Username Taken"
+        document.querySelector('.usernameTaken').innerText = "Username Taken"
     } else {
         const joinModal = document.querySelector('.joinChatModal')
         joinModal.classList.add('hidden')
@@ -214,10 +214,10 @@ function cleanUp(cleanup){
 }
 
 function someoneIsWriting (writes){
-    document.querySelector('.someoneIsTyping').innerHTML = writes
+    document.querySelector('.someoneIsTyping').innerText = writes
 }
 setInterval(function(){ 
-    document.querySelector('.someoneIsTyping').innerHTML = ""
+    document.querySelector('.someoneIsTyping').innerText = ""
  }, 2000);
 
 
