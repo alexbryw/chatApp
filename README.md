@@ -1,7 +1,7 @@
 # chatApp
 
 # Repo-link
-https://github.com/Anne-Lie-Back/chatApp
+https://github.com/alexbryw/chatApp
 
 # Description of the assignment
 The assignment was to create a working chat app. There should be password-protected chat-rooms and public chat-rooms, all listed separately. You should be able to create new rooms, and if a room is not used it disappears.  
