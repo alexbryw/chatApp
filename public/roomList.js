@@ -91,9 +91,9 @@ function listAllRooms(){
         enterPasswordDiv.appendChild(passwordInput)
         enterPasswordDiv.appendChild(passwordButton)
         li.addEventListener('click', () => {
-            if(currentRoom !== privateRoomArray[i].roomName){
-                enterPasswordDiv.classList.toggle('hidden')        
-            }
+           if(currentRoom !== privateRoomArray[i].roomName){
+                enterPasswordDiv.classList.toggle('hiddenPasswordForm')     
+           }
         })
         
         if(currentRoom === privateRoomArray[i].roomName){
