@@ -269,12 +269,16 @@ li{
     cursor: default;
 }
 
+.newRoomHeader{
+    width: 100%;
+    border-top: 1px solid black;
+    display:flex;
+    justify-content: center;
+    padding: 1rem 1.5rem;
+}
 h3{
     font-size: 1.5rem;
-    letter-spacing: 0.2rem;
-    padding: 1rem 1.5rem;
-    border-top: 1px solid black;
-    margin: auto;
+    letter-spacing: 0.2rem;  
 }
 
 .newRoomForm{
