@@ -4,14 +4,12 @@ const http = require('http').createServer(app)
 const io = require('socket.io')(http)
 
 const port = 3000
-
+//Users are handled in /utils/users.js, but rooms ar handled in getAllRoomsWithClients() in this file.
 const {userJoin, removeUserOnLeave, getCurrentUser, getUsers} = require('./utils/users')
 
 let roomPasswordList = [{roomName: "main", password: ""}] 
-let roomList = [] //not used only backup
 
 app.use(express.static('public'))
-
 
 io.on('connection', (socket) => {
     console.log('User connected')
@@ -35,35 +33,32 @@ io.on('connection', (socket) => {
 
     //Leave old room and join the new room and update room in users.
     socket.on('change room', ({username, room, password}) => {
-        // console.log(username, room, password)
         const user = getCurrentUser(socket.id)
         if(user.room !== room){
             if(user){
                 const pwdRoom = roomPasswordList.find( ({ roomName }) => roomName === room)
                 if(pwdRoom){
-                    console.log("Room found will check if password is needed.")
+                    //Check if room has a password, and if not join room.
                     if(pwdRoom.password){
-                        console.log("password found , check password: ", pwdRoom.roomName, pwdRoom.password)
+                        //If room has a password, check if its correct, else don't let user join room.
                         if(pwdRoom.password === password){
-                            console.log("Password is correct , joining room: ")
-    
+                            //Joining room when password is correct.
                             socket.broadcast.to(user.room).emit('message', {color: 'green', message: `${username} has left the chat`})
                             socket.leaveAll()// User leaves all rooms.
                             user.room = room
                             socket.join(user.room) //User joins new room.
                             socket.emit('onPasswordTry', {isPasswordCorrect: true}) //Send message password is correct.
                             socket.emit('set currentRoom', user.room)
-                            socket.emit('clean up', true)
+                            socket.emit('clean up', true) //Clears out client chat room when entering a new room.
                             socket.emit('message', {color: 'green', message: `${username}, you have now entered the ${user.room} room`})
                             socket.broadcast.to(user.room).emit('message', {color: 'green', message: `${username} has joined the chat`})
-                            io.emit('newRoomList', getAllRoomsWithClients())
+                            io.emit('newRoomList', getAllRoomsWithClients()) //Update all clients of updated rooms.
                         } else {
-                            console.log("Wrong Password try again.")
+                            //Send password fail message to client.
                             socket.emit('onPasswordTry', {isPasswordCorrect: false}) //Send message password is wrong.
                         }
                     } else {
-                        console.log("password not found, join room")
-                        
+                        //Joining a public room without password.
                         socket.broadcast.to(user.room).emit('message', {color: 'green', message: `${username} has left the chat`})
                         socket.leaveAll()// User leaves all rooms.
                         user.room = room
@@ -75,8 +70,7 @@ io.on('connection', (socket) => {
                         io.emit('newRoomList', getAllRoomsWithClients())
                     }
                 } else {
-                    console.log("pwd room not found join without password.")
-                    
+                    //Default join room if room not found in passwordList
                     socket.broadcast.to(user.room).emit('message', {color: 'green', message: `${username} has left the chat`})
                     socket.leaveAll()// User leaves all rooms.
                     user.room = room
@@ -85,12 +79,11 @@ io.on('connection', (socket) => {
                     socket.broadcast.to(user.room).emit('message', {color: 'green', message: `${username} has joined the chat`})
                     io.emit('newRoomList', getAllRoomsWithClients())
                 }
-    
-                
             }
         }
     })
 
+    //Create a new room with or without password.
     socket.on('new room', ({username, room, password}) => {
         if(room){
             const roomFound = roomPasswordList.find(({ roomName }) => roomName === room)
@@ -155,9 +148,9 @@ io.on('connection', (socket) => {
     })
 })
 
+//Returns all rooms and users in io.sockets.adapter.rooms and adds username alongside socket.id.
 function getAllRoomsWithClients() {
     const availableRooms = []
-    // console.log(Object.keys(io.sockets.adapter.rooms)) //Use Object.keys for dictionary key/value pair.
     const rooms = io.sockets.adapter.rooms  //Dictionary of all rooms with users socket.id
     if (rooms) {
         for (const room in rooms) {
@@ -186,18 +179,15 @@ function getAllRoomsWithClients() {
     }
 
     if(availableRooms.length > 0){
-        roomList = availableRooms //not used only backup
         removeEmptyRoomsFromPasswordList(availableRooms)
         return availableRooms
     } else {
-        roomList = availableRooms //not used only backup
         return false
     }
 }
 
+//filter all rooms to new array if they exist in available rooms to remove empty rooms from password list.
 function removeEmptyRoomsFromPasswordList(availableRooms){
-
-    //filter all rooms to new array if they exist in available rooms to remove empty rooms from password list.
     const newPasswordList = roomPasswordList.filter(pwdRoom => availableRooms.find(({ roomName }) => roomName === pwdRoom.roomName ))
     roomPasswordList = newPasswordList // update password list without empty rooms.
 }
