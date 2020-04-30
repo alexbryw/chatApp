@@ -23,26 +23,35 @@ function init(){
     newRoomForm.addEventListener('click', onGoToNewRoom)
     setCurrentRoom("main")
     listAllRooms()
+
+    //Socket io events
+    socket.on('newRoomList', getNewRoomList)
+    socket.on('onPasswordTry', PasswordTry)
+    socket.on('onCreateNewRoomTry', tryCreateNewRoom)
+    socket.on('post userlist', postUserlist)
+    socket.on('set currentRoom', settingCurrentRoom)
+    socket.on('clean up', cleanUp)
+    socket.on('writing', someoneIsWriting)
+    socket.on('message', writeMessage)
 }
 
-socket.on('newRoomList', (inRoomList) => {
+function getNewRoomList(inRoomList){
     console.log("from newRoomList")
     console.log(inRoomList)
     rooms = inRoomList
     listAllRooms()
+}
 
-})
-
-socket.on('onPasswordTry', ( data ) => {
+function PasswordTry(data) {
     //const passwordInput = document.querySelector('.passwordInput')
     if(!data.isPasswordCorrect){
         alert('Wrong Password!') //Alert just for testing.
         /*         passwordInput.style.border = ('2px solid red')
         passwordInput.placeholder = 'Wrong Password!' */
     } 
-})
+}
 
-socket.on('onCreateNewRoomTry', ( data ) => {
+function tryCreateNewRoom( data ){
     const NewRoomTakenError = document.querySelector('#newRoomNameIn')
     const newRoomButton = document.querySelector('#newRoomButton')
     if(!data.isRoomCreated){   
@@ -56,7 +65,7 @@ socket.on('onCreateNewRoomTry', ( data ) => {
         NewRoomTakenError.value = ''
         newRoomButton.innerText = 'Create and join'
     }
-})
+}
 
 //New user/room list sent here on every change in list.
 // socket.on('roomList', (data) => {
@@ -124,19 +133,17 @@ function getUserList(event){
     socket.emit('get userlist', true)
 }
 
-socket.on('set currentRoom', (newRoom) => {
+function settingCurrentRoom(newRoom){
     setCurrentRoom(newRoom)
-})
+}
 
 function setCurrentRoom(newRoom){
     currentRoom = newRoom
 }
 
-
-
-socket.on('post userlist', (data) => {
+function postUserlist(data){
     onJoinRoom(data)
-})
+}
 
 function onJoinRoom(data){
     const usernameInput = document.querySelector('#username')
@@ -200,20 +207,19 @@ function changeRoom(newRoomInfo){
 }
 
 
-socket.on('clean up', (cleanup) => {
+function cleanUp(cleanup){
         let messageContainer = document.querySelector('.chatMessages')
         messageContainer.innerHTML = ''
     
-})
+}
 
-socket.on('writing', (writes) => {
-    console.log(writes)
+function someoneIsWriting (writes){
     document.querySelector('.someoneIsTyping').innerHTML = writes
-})
-
+}
 setInterval(function(){ 
     document.querySelector('.someoneIsTyping').innerHTML = ""
  }, 2000);
+
 
 function onGoToNewRoom(event){
     event.preventDefault()

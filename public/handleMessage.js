@@ -40,7 +40,7 @@ function sendMessage(message){
 }
 
 
-socket.on('message', (message) => {
+function writeMessage(message) {
     let newMessage = message.message
     const requestsAPI = newMessage.includes('3775k3PPk0Mm3rl45747')
     if(requestsAPI){
@@ -52,7 +52,7 @@ socket.on('message', (message) => {
     listItem.innerHTML = newMessage
 
     list.appendChild(listItem)
-} )
+}
 
 
 
