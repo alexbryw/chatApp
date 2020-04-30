@@ -37,10 +37,9 @@ function listAllRooms(){
     publicRoomList.innerHTML = ""
     privateRoomList.innerHTML = ""
 
-    /*************** PUBLIC ROOM ********************/
+    /**************** PUBLIC ROOM ********************/
 
     for(let i = 0; i < publicRoomArray.length; i++){
-        // data = JSON.stringify(publicRoomArray[i])
         let li = document.createElement("li")
         li.innerHTML = publicRoomArray[i].roomName
         li.addEventListener('click', () => {selectPublicRoom(publicRoomArray[i])})
@@ -72,9 +71,10 @@ function listAllRooms(){
         data = JSON.stringify(privateRoomArray[i])
         let li = document.createElement("li")
         li.setAttribute("class", "hoverListPrivate")
-        li.innerHTML = privateRoomArray[i].roomName
+        let roomText = document.createElement('p')
+        roomText.innerHTML = privateRoomArray[i].roomName
         const enterPasswordDiv = document.createElement('div')
-        enterPasswordDiv.classList.add('passwordCheckContainer', 'hidden')
+        enterPasswordDiv.classList.add('passwordCheckContainer', 'hiddenPasswordForm')
         enterPasswordDiv.addEventListener('click', (event) => {
             event.stopPropagation()
         })
@@ -84,9 +84,10 @@ function listAllRooms(){
         passwordInput.placeholder = 'enter password'
         
         const passwordButton = document.createElement('button')
+
         passwordButton.innerText = 'enter room'
         passwordButton.addEventListener('click', () => checkPassword(passwordInput.value, privateRoomArray[i]))
-    
+        passwordButton.setAttribute('class', 'passwordButton')
         enterPasswordDiv.appendChild(passwordInput)
         enterPasswordDiv.appendChild(passwordButton)
         li.addEventListener('click', () => {
@@ -100,6 +101,7 @@ function listAllRooms(){
         }
 
         privateRoomList.append(li)
+        li.append(roomText)
         li.append(enterPasswordDiv)
 
         roomLi = document.createElement("li")
@@ -120,6 +122,11 @@ function listAllRooms(){
     }
 }
 
+ function toggleDiv(enterPasswordDiv){
+
+    enterPasswordDiv.classList.toggle('hiddenPasswordForm')
+
+} 
 
 function selectPublicRoom(room){
     changeRoom(room)
