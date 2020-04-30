@@ -58,8 +58,6 @@ function PasswordTry(data) {
     if(!data.isPasswordCorrect){
         applyErrorStyleInput(passwordInput)
         applyErrorStyleButton(passwordButton)
-        //passwordInput.style.border = ('2px solid red')
-       // passwordButton.innerText = 'Wrong Password!'
     }
     
 }
