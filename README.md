@@ -11,13 +11,13 @@ You enter your username in the startpage. There's a main Chat. Rooms are listed 
   
 ## Extra Features: 
 
-** View All Users: **  
+**View All Users:**  
 When you 'mouse over' a room in the public or private room list, you can see all users in that rooms.  
 
-** User is typing: **
+**User is typing:**
 You can see when another users is typing before they send a message, a short 2 sec popup will show that another user is typing.  
 
-** Chat GIF API: ** 
+**Chat GIF API:** 
 Adding a '/' at the beginning of message will try to get a GIF related to the following text, like typing /cat or /happy will add a gif to the chat message, multiple GIFs can be added in one message '/cat /happy'.  
 
 # How to run project
