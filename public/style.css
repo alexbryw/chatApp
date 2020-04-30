@@ -373,7 +373,7 @@ h3{
     color: rgb(255, 255, 113)
 }
 
-@media screen and (max-width: 1400px) {
+@media screen and (max-width: 96.8em) {
     .roomList h2 {
         font-size: 1.1rem;
         padding: 1rem 1rem
@@ -382,5 +382,20 @@ h3{
     h3{
         font-size: 1.1rem;
         padding: 1rem 1rem
+    }
+
+    .newRoomHeader{
+        width: 100%;
+        border-top: 1px solid black;
+        display:flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0.5rem 1rem;
+        height: 2rem;
+    }
+    .newRoomHeader h3{
+        font-size: 0.8rem;
+        padding: 0;
+        color: white;
     }
 }
