@@ -3,7 +3,6 @@ let nameOfUser = ""
 let listOfSortedRooms = [] //backup save list if needed later
 let currentRoom = "" //TODO Set later from sortUserList, compare to nameOfUser
 
-
 /* const {username, room} = Qs.parse(location.search, {
     ignoreQueryPrefix: true
 }) */
@@ -34,12 +33,12 @@ socket.on('newRoomList', (inRoomList) => {
 })
 
 socket.on('onPasswordTry', ( data ) => {
-    //const passwordInput = document.querySelector('.passwordInput')
+    const passwordInput = document.querySelector('.passwordInput')
     if(!data.isPasswordCorrect){
         alert('Wrong Password!') //Alert just for testing.
-        /*         passwordInput.style.border = ('2px solid red')
-        passwordInput.placeholder = 'Wrong Password!' */
-    } 
+        passwordInput.style.border = ('2px solid red')
+        passwordInput.placeholder = 'Wrong Password!' 
+    }
 })
 
 socket.on('onCreateNewRoomTry', ( data ) => {

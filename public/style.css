@@ -329,9 +329,10 @@ h3{
 }
 
 
-.hidden{
+.hiddenPasswordForm{
     display: none
 }
+
 
 ::-webkit-scrollbar { /*Keeps the scrollbar in the todolist visable*/
     -webkit-appearance: none;

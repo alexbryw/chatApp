@@ -72,9 +72,10 @@ function listAllRooms(){
         data = JSON.stringify(privateRoomArray[i])
         let li = document.createElement("li")
         li.setAttribute("class", "hoverListPrivate")
-        li.innerHTML = privateRoomArray[i].roomName
+        let roomText = document.createElement('p')
+        roomText.innerHTML = privateRoomArray[i].roomName
         const enterPasswordDiv = document.createElement('div')
-        enterPasswordDiv.classList.add('passwordCheckContainer', 'hidden')
+        enterPasswordDiv.classList.add('passwordCheckContainer', 'hiddenPasswordForm')
         enterPasswordDiv.addEventListener('click', (event) => {
             event.stopPropagation()
         })
@@ -89,8 +90,9 @@ function listAllRooms(){
     
         enterPasswordDiv.appendChild(passwordInput)
         enterPasswordDiv.appendChild(passwordButton)
-        li.addEventListener('click', () => {
-            enterPasswordDiv.classList.toggle('hidden')        
+        roomText.addEventListener('click', () => {
+            toggleDiv(enterPasswordDiv)
+            console.log('hej')   
         })
         
         if(currentRoom === privateRoomArray[i].roomName){
@@ -98,6 +100,7 @@ function listAllRooms(){
         }
 
         privateRoomList.append(li)
+        li.append(roomText)
         li.append(enterPasswordDiv)
 
         roomLi = document.createElement("li")
@@ -118,6 +121,11 @@ function listAllRooms(){
     }
 }
 
+ function toggleDiv(enterPasswordDiv){
+
+    enterPasswordDiv.classList.toggle('hiddenPasswordForm')
+
+} 
 
 function selectPublicRoom(room){
     changeRoom(room)
