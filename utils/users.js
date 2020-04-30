@@ -1,4 +1,4 @@
-const users = []
+const users = [] //List of all users.
 
 //Join user to chat, (Room can be set later?)
 function userJoin( id, username, color, room){
@@ -28,6 +28,7 @@ function removeUserOnLeave(id){
     } 
 }
 
+//Get all users if there are any.
 function getUsers(){
     if(users.length > 0){
         return users
@@ -36,15 +37,9 @@ function getUsers(){
     }
 }
 
-//Get room users
-/* function getUsersRoom(room){
-    return users.filter(user => user.room === room)
-} */
-
 module.exports = {
     userJoin,
     getCurrentUser,
     removeUserOnLeave,
     getUsers,
-   // getRoomUsers
 }
