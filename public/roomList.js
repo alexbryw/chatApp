@@ -1,23 +1,4 @@
 let rooms = [
-    // {
-    //     roomName: "grejer",
-    //     password: "korv"
-    // },{
-    //     roomName: "saker",
-    //     password: ""
-    // },{
-    //     roomName: "bös",
-    //     password: "korv"
-    // },{
-    //     roomName: "ting",
-    //     password: ""
-    // },{
-    //     roomName: "stuff",
-    //     password: "korv"
-    // },{
-    //     roomName: "mojs",
-    //     password: ""
-    // }
 ]
 
 function listAllRooms(){
@@ -37,9 +18,10 @@ function listAllRooms(){
     publicRoomList.innerHTML = ""
     privateRoomList.innerHTML = ""
 
-    /**************** PUBLIC ROOM ********************/
+    /**************** PUBLIC ROOM LIST ********************/
 
     for(let i = 0; i < publicRoomArray.length; i++){
+
         let li = document.createElement("li")
         li.innerText = publicRoomArray[i].roomName
         li.addEventListener('click', () => {selectPublicRoom(publicRoomArray[i])})
@@ -48,18 +30,22 @@ function listAllRooms(){
             li.setAttribute("id", "usersCurrentRoom")
         }
         publicRoomList.appendChild(li)
-        roomLi = document.createElement("li")
-        roomLi.innerText = publicRoomArray[i].roomName
-        roomLi.setAttribute("class", "hoverRoomName")
+
+        const roomListHeader = document.createElement("li")
+        roomListHeader.innerText = publicRoomArray[i].roomName
+        roomListHeader.setAttribute("class", "hoverRoomName")
         let hoverListDiv = document.createElement('div')
         hoverListDiv.setAttribute("class", "hoverListText")
         let nameUl = document.createElement('ul')
-        nameUl.appendChild(roomLi)
+
+        nameUl.appendChild(roomListHeader)
+
         for (const user of publicRoomArray[i].users) { //loop out all users in room.
             let nameLi = document.createElement("li")
             nameLi.innerText = user.name
             nameUl.appendChild(nameLi)
         }
+
         hoverListDiv.appendChild(nameUl)
         publicRoomList.appendChild(hoverListDiv)
     }
@@ -68,28 +54,29 @@ function listAllRooms(){
 
     for(let i = 0; i < privateRoomArray.length; i++){
         
-        data = JSON.stringify(privateRoomArray[i])
         let li = document.createElement("li")
         li.setAttribute("class", "hoverListPrivate")
-        let roomText = document.createElement('p')
-        roomText.innerText = privateRoomArray[i].roomName
+        li.innerText = privateRoomArray[i].roomName
         const enterPasswordDiv = document.createElement('div')
         enterPasswordDiv.classList.add('passwordCheckContainer', 'hiddenPasswordForm')
         enterPasswordDiv.addEventListener('click', (event) => {
             event.stopPropagation()
         })
+
+        /******* Enter password div *******/
         const passwordInput = document.createElement('input')
         passwordInput.setAttribute('class', 'passwordInput')
         passwordInput.type = 'text'
         passwordInput.placeholder = 'enter password'
         
         const passwordButton = document.createElement('button')
-
         passwordButton.innerText = 'enter room'
         passwordButton.addEventListener('click', () => checkPassword(passwordInput.value, privateRoomArray[i]))
         passwordButton.setAttribute('class', 'passwordButton')
+
         enterPasswordDiv.appendChild(passwordInput)
         enterPasswordDiv.appendChild(passwordButton)
+
         li.addEventListener('click', () => {
            if(currentRoom !== privateRoomArray[i].roomName){
                 enterPasswordDiv.classList.toggle('hiddenPasswordForm')     
@@ -100,11 +87,10 @@ function listAllRooms(){
             li.setAttribute("id", "usersCurrentRoom")
         }
 
-        privateRoomList.append(li)
-        li.append(roomText)
         li.append(enterPasswordDiv)
+        privateRoomList.append(li)
 
-        roomLi = document.createElement("li")
+        const roomLi = document.createElement("li")
         roomLi.innerText = privateRoomArray[i].roomName
         roomLi.setAttribute("class", "hoverRoomName")
 
@@ -112,7 +98,7 @@ function listAllRooms(){
         hoverListDiv.setAttribute("class", "hoverListTextPrivate")
         let nameUl = document.createElement('ul')
         nameUl.appendChild(roomLi)
-        for (const user of privateRoomArray[i].users) { //loop out all users in room.
+        for (const user of privateRoomArray[i].users) { 
             let nameLi = document.createElement("li")
             nameLi.innerText = user.name
             nameUl.appendChild(nameLi)
@@ -120,30 +106,13 @@ function listAllRooms(){
         hoverListDiv.appendChild(nameUl)
         privateRoomList.appendChild(hoverListDiv)
     }
-}
-
- function toggleDiv(enterPasswordDiv){
-
-    enterPasswordDiv.classList.toggle('hiddenPasswordForm')
-
 } 
 
 function selectPublicRoom(room){
     changeRoom(room)
 }
 
-//THIS FUNCTION NOT FUNCTIONAL, NEED CORRECT PASSWORD-VALUE TO COMPARE WITH
-
 function checkPassword(passwordInput, room){
-    console.log(room.roomName)
     const newRoomInfo = {roomName: room.roomName, password: passwordInput}
     changeRoom(newRoomInfo)
-    // //Need to compare with right value
-    // if(passwordInput === room.password){
-    //     changeRoom(room)
-    // }
-    // else{
-    //     passwordInput.style.border = ('2px solid red')
-    //     passwordInput.placeholder = 'Wrong Password!'
-    // }
 }
