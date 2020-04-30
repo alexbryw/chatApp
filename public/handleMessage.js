@@ -1,4 +1,7 @@
+/**************** SENDING MESSAGE ********************/
 
+
+// Sends text with / to get a URL from the API
 function checkForDashes(message){
     requestsAPI = message.includes('/')
     if(requestsAPI){
@@ -9,6 +12,8 @@ function checkForDashes(message){
     } 
 }
 
+
+// Replaces words that start with a dash with a key + an URL
 async function sendForAPI(wordCheck){
     for (let i = 0; i < wordCheck.length; i++) {
         let includesDash = wordCheck[i].charAt(0)
@@ -17,8 +22,8 @@ async function sendForAPI(wordCheck){
                 let response = await fetch(`https://api.giphy.com/v1/gifs/search?api_key=LG8XDGkXtIyyZNJyMUjroUYM1G9wDnMP&q=`+
                             `${wordCheck[i].substring(1)}&limit=1&offset=0&rating=G&lang=en`)
                     .then(res => res.json())
-                //The added code tells the reciver that it's a image
-                //It's also EttSkeppKommerLastat in L33T-speak
+                //The added key tells the receiver that it's a image
+                //It's also EttSkeppKommerLastat in L33T-speak ;)
                 wordCheck[i] = "3775k3PPk0Mm3rl45747" + response.data[0].images.downsized.url
             }
             catch(error) {
@@ -32,6 +37,7 @@ async function sendForAPI(wordCheck){
     sendMessage(wordCheck.join(' '))
 }
 
+//Prepare message for the server
 function sendMessage(message){
     const newMessage = message.replace(/<[^>]*>/g, '');
     socket.emit('message', newMessage)
@@ -40,6 +46,10 @@ function sendMessage(message){
 }
 
 
+/**************** RECEIVING MESSAGE ********************/
+
+
+// Replaces words with a key with a <img>, using the URL
 function writeMessage(message) {
     let newMessage = message.message
     const requestsAPI = newMessage.includes('3775k3PPk0Mm3rl45747')
@@ -53,8 +63,6 @@ function writeMessage(message) {
 
     list.appendChild(listItem)
 }
-
-
 
 function addImagesToMessage(message){
     let messageArray = message.split(" ")
