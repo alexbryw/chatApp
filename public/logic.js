@@ -41,14 +41,41 @@ function getNewRoomList(inRoomList){
     listAllRooms()
 }
 
-function PasswordTry(data) {
-    const passwordInput = document.querySelector('.passwordInput')
-    const passwordButton = document.querySelector('.passwordButton')
-
-    if(!data.isPasswordCorrect){
-        passwordInput.style.border = ('2px solid red')
-        passwordButton.innerText = 'Wrong Password!'
+function changeOpacity(className) {
+    var elems = document.querySelectorAll(className);
+    var index = 0, length = elems.length;
+    for ( ; index < length; index++) {
+        elems[index].style.transition = "opacity 0.5s linear 0s";
+        elems[index].style.opacity = 0.5;
     }
+}
+
+function PasswordTry(data) {
+    const passwordInput = document.querySelectorAll('input.passwordInput')
+    const passwordButton = document.querySelectorAll('button.passwordButton')
+    
+    console.log(passwordInput)
+    if(!data.isPasswordCorrect){
+        applyErrorStyleInput(passwordInput)
+        applyErrorStyleButton(passwordButton)
+        //passwordInput.style.border = ('2px solid red')
+       // passwordButton.innerText = 'Wrong Password!'
+    }
+    
+}
+function applyErrorStyleInput(passwordInput){
+    let index = 0, length = passwordInput.length;
+    for ( ; index < length; index++) {
+        passwordInput[index].style.border = ('2px solid red')
+    }
+}
+
+function applyErrorStyleButton(passwordButton){
+    let index = 0, length = passwordButton.length;
+    for ( ; index < length; index++) {
+        passwordButton[index].innerText = 'Wrong Password!'
+    }
+    console.log('Knappen rullar')
 }
 
 function tryCreateNewRoom( data ){

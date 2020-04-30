@@ -4,8 +4,6 @@ let rooms = [
 function listAllRooms(){
     let publicRoomArray = []
     let privateRoomArray = []
-
-    // Checks if there is a password then split the code
     for(let i = 0; i < rooms.length; i++){
         if(rooms[i].roomPassword){
             privateRoomArray.push(rooms[i])
@@ -31,6 +29,7 @@ function listAllRooms(){
         }
         publicRoomList.appendChild(li)
 
+        /***** userlists for public rooms *****/
         const roomListHeader = document.createElement("li")
         roomListHeader.innerText = publicRoomArray[i].roomName
         roomListHeader.setAttribute("class", "hoverRoomName")
@@ -40,7 +39,7 @@ function listAllRooms(){
 
         nameUl.appendChild(roomListHeader)
 
-        for (const user of publicRoomArray[i].users) { //loop out all users in room.
+        for (const user of publicRoomArray[i].users) {
             let nameLi = document.createElement("li")
             nameLi.innerText = user.name
             nameUl.appendChild(nameLi)
@@ -94,6 +93,7 @@ function listAllRooms(){
         roomLi.innerText = privateRoomArray[i].roomName
         roomLi.setAttribute("class", "hoverRoomName")
 
+        /***** userlists for private rooms *****/
         let hoverListDiv = document.createElement('div')
         hoverListDiv.setAttribute("class", "hoverListTextPrivate")
         let nameUl = document.createElement('ul')
